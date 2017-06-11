@@ -1,12 +1,12 @@
 <?php
 
-$acquia_site_name = 'business_directory';
-//if (file_exists('/var/www/site-php')) {
-//  require("/var/www/site-php/{$acquia_site_name}/{$acquia_site_name}-settings.inc");
-//}
+$forge_site_name = 'business_directory';
+if (file_exists('/var/www/sites-config')) {
+  require("/var/www/sites-config/{$forge_site_name}/{$forge_site_name}-settings.inc");
+}
 
-$settings['file_private_path'] = "/mnt/files/{$acquia_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}/files-private";
-$config['system.file']['path']['temporary'] = "/mnt/tmp/{$acquia_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}";
+//$settings['file_private_path'] = "/mnt/files/{$forge_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}/files-private";
+//$config['system.file']['path']['temporary'] = "/mnt/tmp/{$forge_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}";
 
 //# https://docs.acquia.com/article/drupal-8-cache-backend
 //$settings['cache']['default'] = 'cache.backend.memcache';
