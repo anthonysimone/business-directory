@@ -1,9 +1,20 @@
 <?php
 
 $forge_site_name = 'business_directory';
-if (file_exists('/var/www/sites-config')) {
-  require("/var/www/sites-config/{$forge_site_name}/{$forge_site_name}-settings.inc");
-}
+//if (file_exists('/var/www/sites-config')) {
+//  require("/var/www/sites-config/{$forge_site_name}/{$forge_site_name}-settings.inc");
+//}
+
+$databases['default']['default'] = array (
+  'database' => getenv('DB_NAME'),
+  'username' => getenv('DB_USER'),
+  'password' => getenv('DB_PASSWORD'),
+  'prefix' => '',
+  'host' => getenv('DB_HOST'),
+  'port' => '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
+);
 
 //$settings['file_private_path'] = "/mnt/files/{$forge_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}/files-private";
 //$config['system.file']['path']['temporary'] = "/mnt/tmp/{$forge_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}";
