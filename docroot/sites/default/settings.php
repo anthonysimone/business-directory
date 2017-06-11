@@ -103,18 +103,18 @@ $config['system.logging']['error_level'] = 'all';
 $config['google_analytics.settings']['account'] = '';
 
 // If $_ENV['AH_SITE_ENVIRONMENT'], load Acquia settings.
-if(isset($_ENV['AH_SITE_ENVIRONMENT'])) {
-  if (file_exists(__DIR__ . '/settings.acquia.php')) {
-    include __DIR__ . '/settings.acquia.php';
+if(isset($_ENV['FORGE_SITE_ENVIRONMENT'])) {
+  if (file_exists(__DIR__ . '/settings.forge.php')) {
+    include __DIR__ . '/settings.forge.php';
 
   }
 }
 // If $_SERVER['AH_SITE_ENVIRONMENT'], load Blackmesh settings.
-elseif(isset($_SERVER['AH_SITE_ENVIRONMENT'])) {
-  if (file_exists(__DIR__ . '/settings.blackmesh.php')) {
-    include __DIR__ . '/settings.blackmesh.php';
-  }
-}
+//elseif(isset($_SERVER['FORGE_SITE_ENVIRONMENT'])) {
+//  if (file_exists(__DIR__ . '/settings.blackmesh.php')) {
+//    include __DIR__ . '/settings.blackmesh.php';
+//  }
+//}
 // If drupal-vm settings exist, load them.
 elseif (file_exists(__DIR__ . '/settings.drupalvm.php')) {
   include __DIR__ . '/settings.drupalvm.php';

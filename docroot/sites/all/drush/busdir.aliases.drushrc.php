@@ -1,47 +1,15 @@
 <?php
 
 $drush_major_version = 8;
+$project_drush_path = '/home/forge/busdir-dev.organyzr.com/vendor/bin/drush';
 
-if (!isset($drush_major_version)) {
-  $drush_version_components = explode('.', DRUSH_VERSION);
-  $drush_major_version = $drush_version_components[0];
-}
-// Site paragon, environment dev
+// Dev env
 $aliases['dev'] = array(
-  'root' => '/var/www/html/paragon.dev/docroot',
-  'ac-site' => 'paragon',
-  'ac-env' => 'dev',
-  'ac-realm' => 'devcloud',
-  'uri' => 'paragonbhybefranz.devcloud.acquia-sites.com',
-  'remote-host' => 'free-6157.devcloud.hosting.acquia.com',
-  'remote-user' => 'paragon.dev',
+  'root' => '/home/forge/busdir-dev.organyzr.com/docroot',
+  'uri' => 'busdir-dev.organyzr.com',
+  'remote-host' => '67.205.190.2',
+  'remote-user' => 'forge',
   'path-aliases' => array(
-    '%drush-script' => 'drush' . $drush_major_version,
+    '%drush-script' => $project_drush_path,
   )
-);
-$aliases['dev.livedev'] = array(
-  'parent' => '@paragon.dev',
-  'root' => '/mnt/gfs/paragon.dev/livedev/docroot',
-);
-
-if (!isset($drush_major_version)) {
-  $drush_version_components = explode('.', DRUSH_VERSION);
-  $drush_major_version = $drush_version_components[0];
-}
-// Site paragon, environment test
-$aliases['test'] = array(
-  'root' => '/var/www/html/paragon.test/docroot',
-  'ac-site' => 'paragon',
-  'ac-env' => 'test',
-  'ac-realm' => 'devcloud',
-  'uri' => 'paragono6pncnthxe.devcloud.acquia-sites.com',
-  'remote-host' => 'free-6157.devcloud.hosting.acquia.com',
-  'remote-user' => 'paragon.test',
-  'path-aliases' => array(
-    '%drush-script' => 'drush' . $drush_major_version,
-  )
-);
-$aliases['test.livedev'] = array(
-  'parent' => '@paragon.test',
-  'root' => '/mnt/gfs/paragon.test/livedev/docroot',
 );
