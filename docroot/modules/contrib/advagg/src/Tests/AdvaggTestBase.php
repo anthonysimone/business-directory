@@ -44,7 +44,7 @@ abstract class AdvaggTestBase extends WebTestBase {
    *
    * @var \Drupal\Core\Config\Config
    */
-  protected $system_config;
+  protected $systemConfig;
 
   /**
    * {@inheritdoc}
@@ -56,8 +56,8 @@ abstract class AdvaggTestBase extends WebTestBase {
     $this->config = \Drupal::configFactory()->getEditable('advagg.settings');
 
     // Enable aggregation.
-    $this->system_config = \Drupal::configFactory()->getEditable('system.performance');
-    $this->system_config->set('css.preprocess', TRUE)
+    $this->systemConfig = \Drupal::configFactory()->getEditable('system.performance');
+    $this->systemConfig->set('css.preprocess', TRUE)
       ->set('js.preprocess', TRUE)
       ->save();
 

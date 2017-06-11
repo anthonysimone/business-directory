@@ -148,7 +148,6 @@ function advagg_js_alter(&$js) {
     }
 
     // Google Analytics.
-    // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
     if (strpos($value['data'], 'GoogleAnalyticsObject') !== FALSE
       || strpos($value['data'], '.google-analytics.com/ga.js') !== FALSE
     ) {
@@ -189,7 +188,6 @@ function advagg_js_alter(&$js) {
 
       // If type is external but doesn't start with http, https, or // change it
       // to file.
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
       if ($value['type'] === 'external'
         && stripos($value['data'], 'http://') !== 0
         && stripos($value['data'], 'https://') !== 0
@@ -200,7 +198,6 @@ function advagg_js_alter(&$js) {
 
       // If type is file but it starts with http, https, or // change it to
       // external.
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
       if ($value['type'] === 'file'
         && (stripos($value['data'], 'http://') === 0
         || stripos($value['data'], 'https://') === 0
@@ -211,20 +208,21 @@ function advagg_js_alter(&$js) {
 
       // If type is external and starts with http, https, or // but points to
       // this host change to file, but move it to the top of the aggregation
-      // stack.
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
-      if ($value['type'] === 'external'
-        && stripos($value['data'], $mod_base_url) !== FALSE
-        && (stripos($value['data'], 'http://') === 0
-          || stripos($value['data'], 'https://') === 0
-          || stripos($value['data'], '//') === 0
+      // stack as long as js_preserve_external is not set.
+      if (\Drupal::config('advagg.settings')->get('js_preserve_external') === FALSE) {
+        if ($value['type'] === 'external'
+          && stripos($value['data'], $mod_base_url) !== FALSE
+          && (stripos($value['data'], 'http://') === 0
+            || stripos($value['data'], 'https://') === 0
+            || stripos($value['data'], '//') === 0
           )
-      ) {
-        $value['type'] = 'file';
-        $value['group'] = JS_LIBRARY;
-        $value['every_page'] = TRUE;
-        $value['weight'] = -40000;
-        $value['data'] = substr($value['data'], stripos($value['data'], $mod_base_url) + $mod_base_url_len);
+        ) {
+          $value['type'] = 'file';
+          $value['group'] = JS_LIBRARY;
+          $value['every_page'] = TRUE;
+          $value['weight'] = -40000;
+          $value['data'] = substr($value['data'], stripos($value['data'], $mod_base_url) + $mod_base_url_len);
+        }
       }
     }
     unset($value);
@@ -252,7 +250,6 @@ function advagg_css_alter(&$css) {
 
       // If type is external but doesn't start with http, https, or // change it
       // to file.
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
       if ($value['type'] === 'external'
         && stripos($value['data'], 'http://') !== 0
         && stripos($value['data'], 'https://') !== 0
@@ -263,7 +260,6 @@ function advagg_css_alter(&$css) {
 
       // If type is file but it starts with http, https, or // change it to
       // external.
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
       if ($value['type'] === 'file'
         && (stripos($value['data'], 'http://') === 0
         || stripos($value['data'], 'https://') === 0
@@ -379,7 +375,6 @@ function advagg_enabled() {
   }
 
   // Enable debugging if requested.
-  // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
   if (isset($_GET['advagg-debug'])
     && $_GET['advagg-debug'] == 1
     && $user->hasPermission('bypass advanced aggregation')
@@ -434,7 +429,7 @@ function advagg_current_hooks_hash_array() {
  * @return string
  *   The serializer. Defaults to json_encode.
  */
-function get_serializer() {
+function advagg_get_serializer() {
   $serialize_function = \Drupal::config('advagg.settings')->get('serializer');
   if (!is_string($serialize_function) || !is_callable($serialize_function)) {
     $serialize_function = 'json_encode';
@@ -456,7 +451,7 @@ function advagg_get_current_hooks_hash() {
     $aggregate_settings = advagg_current_hooks_hash_array();
 
     // Generate the hash.
-    $serialize_function = get_serializer();
+    $serialize_function = advagg_get_serializer();
     $current_hash = Crypt::hashBase64($serialize_function($aggregate_settings));
   }
 
@@ -498,7 +493,7 @@ function advagg_hooks_implemented($all = TRUE) {
   $module_handler->alter('advagg_hooks_implemented', $hooks, $all);
 
   // Cache module_implements as this will load up .inc files.
-  $serialize_function = get_serializer();
+  $serialize_function = advagg_get_serializer();
   $cid = 'advagg_hooks_implemented:' . (int) $all . ':' . Crypt::hashBase64($serialize_function($hooks));
   $cache = \Drupal::cache('bootstrap')->get($cid);
   if (!empty($cache->data)) {

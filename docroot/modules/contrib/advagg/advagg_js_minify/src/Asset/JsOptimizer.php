@@ -172,8 +172,7 @@ class JsOptimizer implements AssetOptimizerInterface {
 
     // Do not re-minify if the file is already minified.
     $semicolon_count = substr_count($data, ';');
-    // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
-    if ( $minifier != 2
+    if ($minifier != 2
       && $semicolon_count > 10
       && $semicolon_count > (substr_count($data, "\n", strpos($data, ';')) * 5)
       ) {
@@ -224,8 +223,7 @@ class JsOptimizer implements AssetOptimizerInterface {
 
       // Make sure the returned string is not empty or has a VERY high
       // minification ratio.
-      // @ignore sniffer_whitespace_openbracketspacing_openingwhitespace
-      if ( empty($data)
+      if (empty($data)
         || empty($ratio)
         || $ratio < 0
         || $ratio > $this->config->get('ratio_max')
@@ -261,8 +259,10 @@ class JsOptimizer implements AssetOptimizerInterface {
    *
    * @param string $contents
    *   Javascript string.
+   * @param array $asset
+   *   An asset.
    */
-  public function minifyJsmin(&$contents, $asset) {
+  public function minifyJsmin(&$contents, array $asset) {
     // Do not use jsmin() if the function can not be called.
     if (!function_exists('jsmin')) {
       $this->logger->notice(t('The jsmin function does not exist. Using JSqueeze.'), []);
@@ -274,7 +274,7 @@ class JsOptimizer implements AssetOptimizerInterface {
     // different minifier if jsmin version < 2 and $contents contains multi-
     // byte characters.
     if (version_compare(phpversion('jsmin'), '2.0.0', '<') && $this->stringContainsMultibyteCharacters($contents)) {
-      $this->logger->notice('The currently installed jsmin version does not handle multibyte characters, you may concider to upgrade the jsmin extension. Using JSqueeze fallback.', []);
+      $this->logger->notice('The currently installed jsmin version does not handle multibyte characters, you may consider to upgrade the jsmin extension. Using JSqueeze fallback.', []);
       $contents = $this->minifyJsqueeze($contents, $asset);
       return;
     }
@@ -317,10 +317,12 @@ class JsOptimizer implements AssetOptimizerInterface {
    *
    * @param string $contents
    *   Javascript string.
+   * @param array $asset
+   *   An asset.
    * @param bool $log_errors
    *   FALSE to disable logging to watchdog on failure.
    */
-  public function minifyJsminplus(&$contents, $asset, $log_errors = TRUE) {
+  public function minifyJsminplus(&$contents, array $asset, $log_errors = TRUE) {
     $contents_before = $contents;
 
     // Only include jsminplus.inc if the JSMinPlus class doesn't exist.
@@ -357,8 +359,10 @@ class JsOptimizer implements AssetOptimizerInterface {
    *
    * @param string $contents
    *   Javascript string.
+   * @param array $asset
+   *   An asset.
    */
-  public function minifyJspacker(&$contents, $asset) {
+  public function minifyJspacker(&$contents, array $asset) {
     // Use Packer on the contents of the aggregated file.
     if (!class_exists('\JavaScriptPacker')) {
       include drupal_get_path('module', 'advagg_js_minify') . '/jspacker.inc';
@@ -377,10 +381,12 @@ class JsOptimizer implements AssetOptimizerInterface {
    *
    * @param string $contents
    *   Javascript string.
+   * @param array $asset
+   *   An asset.
    * @param bool $log_errors
    *   FALSE to disable logging to watchdog on failure.
    */
-  public function minifyJshrink(&$contents, $asset, $log_errors = TRUE) {
+  public function minifyJshrink(&$contents, array $asset, $log_errors = TRUE) {
     $contents_before = $contents;
 
     // Only include jshrink.inc if the JShrink\Minifier class doesn't exist.
@@ -417,10 +423,12 @@ class JsOptimizer implements AssetOptimizerInterface {
    *
    * @param string $contents
    *   Javascript string.
+   * @param array $asset
+   *   An asset.
    * @param bool $log_errors
    *   FALSE to disable logging to watchdog on failure.
    */
-  public function minifyJsqueeze(&$contents, $asset, $log_errors = TRUE) {
+  public function minifyJsqueeze(&$contents, array $asset, $log_errors = TRUE) {
     $contents_before = $contents;
 
     // Only include jshrink.inc if the Patchwork\JSqueeze class doesn't exist.

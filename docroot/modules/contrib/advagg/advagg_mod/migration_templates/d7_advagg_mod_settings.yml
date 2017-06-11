@@ -17,7 +17,6 @@ source:
     - advagg_mod_js_async_in_header
     - advagg_mod_js_defer
     - advagg_mod_js_footer
-    - advagg_mod_js_get_external_dns
     - advagg_mod_js_preprocess
 process:
   css_adjust_sort_browsers: advagg_mod_css_adjust_sort_browsers
@@ -31,7 +30,6 @@ process:
   js_async: advagg_mod_js_async
   js_async_in_header: advagg_mod_js_async_in_header
   js_defer: advagg_mod_js_defer
-  js_get_external_dns: advagg_mod_js_get_external_dns
   js_footer: advagg_mod_js_footer
   js_preprocess: advagg_mod_js_preprocess
 destination:

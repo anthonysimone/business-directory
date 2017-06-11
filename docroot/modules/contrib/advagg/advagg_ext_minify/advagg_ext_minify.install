@@ -13,8 +13,9 @@ function advagg_ext_minify_requirements($phase) {
 
   if ($phase == 'runtime') {
 
-    // Check that php's shell_exec works. `dir` is pretty cross-platform.
-    if (!@shell_exec('dir')) {
+    // Check that php's shell_exec works. `ls` is pretty cross-platform.
+    // Older Windows may not have it though so try `dir` as a backup.
+    if (!@shell_exec('ls') && !@shell_exec('dir')) {
       $requirements['advagg_ext_min_shell_exec'] = [
         'title' => t('PHP shell_exec'),
         'severity' => REQUIREMENT_ERROR,

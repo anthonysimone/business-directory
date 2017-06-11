@@ -77,10 +77,10 @@ class SettingsForm extends ConfigFormBase {
     $form = [];
 
     // CSS command line.
-    $this->generateForm($form, ['css', t('CSS')]);
+    $this->generateForm($form, ['css', $this->t('CSS')]);
 
     // JS command line.
-    $this->generateForm($form, ['js', t('JavaScript')]);
+    $this->generateForm($form, ['js', $this->t('JavaScript')]);
     return parent::buildForm($form, $form_state);
   }
 
@@ -98,39 +98,39 @@ class SettingsForm extends ConfigFormBase {
   private function generateForm(array &$form, array $params) {
     $form[$params[0]] = [
       '#type' => 'fieldset',
-      '#title' => t('@title', ['@title' => $params[1]]),
+      '#title' => $this->t('@title', ['@title' => $params[1]]),
     ];
     $form[$params[0]]['cmd'] = [
       '#type' => 'fieldset',
-      '#title' => t('Command Line'),
+      '#title' => $this->t('Command Line'),
     ];
 
-    $description = t('{%CWD%} = \Drupal::root(). <br /> {%IN%} = input file. <br /> {%IN_URL_ENC%} = url pointing to the input file that has been url encoded. <br /> {%OUT%} = output file. <br /><br />');
+    $description = $this->t('{%CWD%} = \Drupal::root(). <br /> {%IN%} = input file. <br /> {%IN_URL_ENC%} = url pointing to the input file that has been url encoded. <br /> {%OUT%} = output file. <br /><br />');
     if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-      $description .= ' ' . t('Example using the <a href="@link1">Microsoft Ajax Minifier</a>. <p><code>@code1</code></p>', [
+      $description .= ' ' . $this->t('Example using the <a href="@link1">Microsoft Ajax Minifier</a>. <p><code>@code1</code></p>', [
         '@link1' => 'http://ajaxmin.codeplex.com/',
         '@code1' => 'AjaxMinifier {%IN%} -o {%OUT%}',
       ]);
     }
 
     if ($params[0] === 'js') {
-      $description .= ' ' . t('Example using the <a href="@link1">Google Closure Compiler</a>. <p><code>@code1</code></p>', [
+      $description .= ' ' . $this->t('Example using the <a href="@link1">Google Closure Compiler</a>. <p><code>@code1</code></p>', [
         '@link1' => 'https://developers.google.com/closure/compiler/docs/gettingstarted_app',
         '@code1' => 'java -jar compiler.jar --js {%CWD%}/{%IN%} --js_output_file {%OUT%}',
       ]);
 
-      $description .= ' ' . t('Example using curl to minify via the <a href="@link1">Online Google Closure Compiler</a>. <p><code>@code1</code></p>', [
+      $description .= ' ' . $this->t('Example using curl to minify via the <a href="@link1">Online Google Closure Compiler</a>. <p><code>@code1</code></p>', [
         '@link1' => 'https://developers.google.com/closure/compiler/docs/api-ref',
         '@code1' => 'curl -o {%OUT%} -d output_info=compiled_code -d code_url={%IN_URL_ENC%} http://closure-compiler.appspot.com/compile',
       ]);
     }
     if ($params[0] === 'css') {
-      $description .= ' ' . t('Example using the <a href="@link1">YUI Compressor</a>. <p><code>@code1</code></p>', [
+      $description .= ' ' . $this->t('Example using the <a href="@link1">YUI Compressor</a>. <p><code>@code1</code></p>', [
         '@link1' => 'http://yui.github.io/yuicompressor/',
         '@code1' => 'java -jar yuicompressor-x.y.z.jar --type css --line-break 4096 {%CWD%}/{%IN%} -o {%OUT%}',
       ]);
 
-      $description .= ' ' . t('Example using curl to minify via an online <a href="@link1">CSS Minifier</a>. <p><code>@code1</code></p>', [
+      $description .= ' ' . $this->t('Example using curl to minify via an online <a href="@link1">CSS Minifier</a>. <p><code>@code1</code></p>', [
         '@link1' => 'http://cnvyr.io/',
         '@code1' => 'curl -o {%OUT%} -F \'files0=@{%IN%}\' http://srv.cnvyr.io/v1?min=css',
       ]);
@@ -138,7 +138,7 @@ class SettingsForm extends ConfigFormBase {
 
     $form[$params[0]]['cmd'][$params[0] . '_cmd'] = [
       '#type' => 'textfield',
-      '#title' => t('Command to run'),
+      '#title' => $this->t('Command to run'),
       '#default_value' => $this->config('advagg_ext_minify.settings')->get($params[0] . '_cmd'),
       '#description' => $description,
     ];

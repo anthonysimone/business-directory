@@ -36,6 +36,13 @@ class DomainRedirectRequestSubscriber implements EventSubscriberInterface {
   protected $pathMatcher;
 
   /**
+   * Redirect configuration.
+   *
+   * @var \Drupal\Core\Config\Config
+   */
+  protected  $redirectConfig;
+
+  /**
    * Constructs a \Drupal\redirect\EventSubscriber\RedirectRequestSubscriber object.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
@@ -47,6 +54,7 @@ class DomainRedirectRequestSubscriber implements EventSubscriberInterface {
    */
   public function __construct(ConfigFactoryInterface $config_factory, RedirectChecker $redirect_checker, PathMatcherInterface $path_matcher) {
     $this->domainConfig = $config_factory->get('redirect_domain.domains');
+    $this->redirectConfig = $config_factory->get('redirect.settings');
     $this->redirectChecker = $redirect_checker;
     $this->pathMatcher = $path_matcher;
   }
@@ -81,7 +89,11 @@ class DomainRedirectRequestSubscriber implements EventSubscriberInterface {
           }
         }
         if ($destination) {
-          $response = new TrustedRedirectResponse($protocol . $destination);
+          // Use the default status code from Redirect.
+          $response = new TrustedRedirectResponse(
+            $protocol . $destination,
+            $this->redirectConfig->get('default_status_code')
+          );
           $event->setResponse($response);
           return;
         }

@@ -78,9 +78,9 @@ class SettingsForm extends ConfigFormBase {
     $form = [];
     $form['active'] = [
       '#type' => 'checkbox',
-      '#title' => t('Bundler is Active'),
+      '#title' => $this->t('Bundler is Active'),
       '#default_value' => $config->get('active'),
-      '#description' => t('If not checked, the bundler will not split up aggregates.'),
+      '#description' => $this->t('If not checked, the bundler will not split up aggregates.'),
     ];
 
     $options = [
@@ -103,14 +103,14 @@ class SettingsForm extends ConfigFormBase {
     ];
     $form['css'] = [
       '#type' => 'fieldset',
-      '#title' => t('CSS Bundling options.'),
+      '#title' => $this->t('CSS Bundling options.'),
     ];
     $form['css']['max_css'] = [
       '#type' => 'select',
-      '#title' => t('Target Number Of CSS Bundles Per Page'),
+      '#title' => $this->t('Target Number Of CSS Bundles Per Page'),
       '#default_value' => $config->get('max_css'),
       '#options' => $options,
-      '#description' => t('If 0 is selected then the bundler is disabled'),
+      '#description' => $this->t('If 0 is selected then the bundler is disabled'),
       '#states' => [
         'disabled' => [
           '#edit-active' => ['checked' => FALSE],
@@ -119,13 +119,13 @@ class SettingsForm extends ConfigFormBase {
     ];
     $form['css']['css_logic'] = [
       '#type' => 'radios',
-      '#title' => t('Grouping logic'),
+      '#title' => $this->t('Grouping logic'),
       '#default_value' => $config->get('css_logic'),
       '#options' => [
-        0 => t('File count'),
-        1 => t('File size'),
+        0 => $this->t('File count'),
+        1 => $this->t('File size'),
       ],
-      '#description' => t('If file count is selected then each bundle will try to have a similar number of original files aggregated inside of it. If file size is selected then each bundle will try to have a similar file size.'),
+      '#description' => $this->t('If file count is selected then each bundle will try to have a similar number of original files aggregated inside of it. If file size is selected then each bundle will try to have a similar file size.'),
       '#states' => [
         'disabled' => [
           '#edit-active' => ['checked' => FALSE],
@@ -135,14 +135,14 @@ class SettingsForm extends ConfigFormBase {
 
     $form['js'] = [
       '#type' => 'fieldset',
-      '#title' => t('JavaScript Bundling options.'),
+      '#title' => $this->t('JavaScript Bundling options.'),
     ];
     $form['js']['max_js'] = [
       '#type' => 'select',
-      '#title' => t('Target Number Of JS Bundles Per Page'),
+      '#title' => $this->t('Target Number Of JS Bundles Per Page'),
       '#default_value' => $config->get('max_js'),
       '#options' => $options,
-      '#description' => t('If 0 is selected then the bundler is disabled'),
+      '#description' => $this->t('If 0 is selected then the bundler is disabled'),
       '#states' => [
         'disabled' => [
           '#edit-active' => ['checked' => FALSE],
@@ -151,13 +151,13 @@ class SettingsForm extends ConfigFormBase {
     ];
     $form['js']['js_logic'] = [
       '#type' => 'radios',
-      '#title' => t('Grouping logic'),
+      '#title' => $this->t('Grouping logic'),
       '#default_value' => $config->get('js_logic'),
       '#options' => [
-        0 => t('File count'),
-        1 => t('File size'),
+        0 => $this->t('File count'),
+        1 => $this->t('File size'),
       ],
-      '#description' => t('If file count is selected then each bundle will try to have a similar number of original files aggregated inside of it. If file size is selected then each bundle will try to have a similar file size.'),
+      '#description' => $this->t('If file count is selected then each bundle will try to have a similar number of original files aggregated inside of it. If file size is selected then each bundle will try to have a similar file size.'),
       '#states' => [
         'disabled' => [
           '#edit-active' => ['checked' => FALSE],

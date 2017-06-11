@@ -194,5 +194,5 @@ function hook_advagg_bundler_analysis_alter(array &$analysis) {
 }
 
 /**
- * @} End of "addtogroup adv_hooks".
+ * @} End of "defgroup advagg_hooks".
  */

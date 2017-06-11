@@ -175,6 +175,17 @@ class GlobalRedirectTest extends WebTestBase {
     //   check why so and enable the test.
     //$this->assertRedirect('admin/config/system/site-information', 'site-info');
 
+    // Test original query string is preserved with alias normalization.
+    $this->assertRedirect('Test-node?&foo&.bar=baz', 'test-node?&foo&.bar=baz');
+
+    // Test alias normalization with trailing ?.
+    $this->assertRedirect('test-node?', 'test-node');
+    $this->assertRedirect('Test-node?', 'test-node');
+
+    // Test alias normalization still works without trailing ?.
+    $this->assertRedirect('test-node', NULL, 'HTTP/1.1 200 OK');
+    $this->assertRedirect('Test-node', 'test-node');
+
     // Login as user with admin privileges.
     $this->drupalLogin($this->adminUser);
 

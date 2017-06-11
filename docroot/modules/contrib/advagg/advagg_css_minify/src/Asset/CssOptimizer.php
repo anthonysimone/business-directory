@@ -227,6 +227,8 @@ class CssOptimizer extends CoreCssOptimizer implements AssetOptimizerInterface {
    *
    * @param string $contents
    *   The contents of the stylesheet.
+   * @param string $minifier
+   *   The name of the minifier to use.
    *
    * @return string
    *   Minified contents of the stylesheet including the imported stylesheets.

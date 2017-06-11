@@ -3,17 +3,16 @@
 namespace Drupal\advagg\State;
 
 use Drupal\Core\State\State as CoreState;
-use Drupal\Core\State\StateInterface;
 
 /**
  * Provides AdvAgg State interfaces with a few extra commands.
  */
-abstract class State extends CoreState implements StateInterface {
+abstract class State extends CoreState {
 
   /**
    * If the array isn't keyed by filepath the column the filepath is stored in.
    */
-  private $pathColumn = NULL;
+  protected $pathColumn = NULL;
 
   /**
    * Gets all stored information from this Key Value Store.
@@ -23,7 +22,6 @@ abstract class State extends CoreState implements StateInterface {
    */
   public function getAll() {
     $values = $this->keyValueStore->getAll();
-    $this->cache += $values;
     return $values;
   }
 
@@ -38,10 +36,7 @@ abstract class State extends CoreState implements StateInterface {
    * Get a semi-random (randomness not guaranteed) key.
    */
   public function getRandomKey() {
-    if (empty($this->cache)) {
-      $this->getAll();
-    }
-    $key = array_rand($this->cache);
+    $key = array_rand($this->getAll());
     return $key;
   }
 

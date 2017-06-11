@@ -11,7 +11,7 @@
  * Have clicks to advagg_validator_js classes run JSHINT clientside.
  */
 (function ($) {
-  "use strict";
+  'use strict';
   Drupal.behaviors.advagg_validator_js_simple = {
     attach: function (context, settings) {
       $('.advagg_validator_js', context).click(function (context) {
@@ -58,7 +58,7 @@
  * Have clicks to advagg_validator_recursive_js classes run JSHINT clientside.
  */
 (function ($) {
-  "use strict";
+  'use strict';
   Drupal.behaviors.advagg_validator_js_recursive = {
     attach: function (context, settings) {
       $('.advagg_validator_recursive_js', context).click(function (context) {

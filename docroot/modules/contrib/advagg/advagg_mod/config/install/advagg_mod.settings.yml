@@ -10,7 +10,6 @@ js_adjust_sort_external: false
 js_async: false
 js_async_in_header: false
 js_defer: 0
-js_get_external_dns: false
 js_footer: 0
 js_preprocess: false
 prefetch: false

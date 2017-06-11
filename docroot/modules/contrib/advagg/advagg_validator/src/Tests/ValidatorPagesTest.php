@@ -26,7 +26,9 @@ class ValidatorPagesTest extends AdminPagesTest {
    * @var array
    */
   public $routes = [];
-  // Should be ['advagg_validator.jshint', 'advagg_validator.csslint', 'advagg_validator.cssw3']
+  // Should be ['advagg_validator.jshint',
+  // 'advagg_validator.csslint',
+  // 'advagg_validator.cssw3']
   // Disabling temporarily due to memory issues while testing.
   // memory usage on validation pages should be fixed.
 }

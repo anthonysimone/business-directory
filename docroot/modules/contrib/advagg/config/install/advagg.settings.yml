@@ -18,6 +18,7 @@ enabled: true
 global_counter: 0
 include_base_url: false
 js_fix_type: true
+js_preserve_external: false
 root_dir_prefix: 'public://'
 serializer: 'json_encode'
 skip_enabled_preprocess_check: false

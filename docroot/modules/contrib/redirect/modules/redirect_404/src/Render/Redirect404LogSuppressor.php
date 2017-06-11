@@ -3,6 +3,7 @@
 namespace Drupal\redirect_404\Render;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\DependencyInjection\DependencySerializationTrait;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -12,6 +13,7 @@ use Psr\Log\NullLogger;
  * Allows 'page not found' events to be suppressed by returning a NullLogger.
  */
 class Redirect404LogSuppressor implements LoggerChannelFactoryInterface {
+  use DependencySerializationTrait;
 
   /**
    * The logger channel factory.
@@ -30,12 +32,12 @@ class Redirect404LogSuppressor implements LoggerChannelFactoryInterface {
   /**
    * Constructs a Redirect404LogSuppressor object.
    *
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_channel_factory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
    *   The logger channel factory.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    */
-  public function __construct(LoggerChannelFactory $logger_channel_factory, ConfigFactoryInterface $config_factory) {
+  public function __construct(LoggerChannelFactoryInterface $logger_channel_factory, ConfigFactoryInterface $config_factory) {
     $this->loggerChannelFactory = $logger_channel_factory;
     $this->configFactory = $config_factory;
   }

@@ -34,29 +34,32 @@ class DomainRedirectRequestSubscriberTest extends UnitTestCase {
           'foo:com' => [
             [
               'sub_path' => '/fixedredirect',
-              'destination' => 'bar.com/fixedredirect'
+              'destination' => 'bar.com/fixedredirect',
             ],
             [
               'sub_path' => '/*',
-              'destination' => 'bar.com/example'
+              'destination' => 'bar.com/example',
             ],
           ],
           'example:com' => [
             [
               'sub_path' => '/foo/*/bar',
               'destination' => 'example.com/bar/foo',
-            ]
+            ],
           ],
           'simpleexample:com' => [
             [
               'sub_path' => '/redirect',
               'destination' => 'redirected.com/redirect',
-            ]
+            ],
           ],
-        ]
+        ],
+      ],
+      'redirect.settings' => [
+        'default_status_code' => 301,
       ],
       'system.site' => [
-      'page.front' => '/',
+        'page.front' => '/',
       ],
     ];
 
@@ -93,7 +96,10 @@ class DomainRedirectRequestSubscriberTest extends UnitTestCase {
       $response = $event->getResponse();
       // Make sure that the response is properly redirected.
       $this->assertEquals($response_url, $response->getTargetUrl());
-      $this->assertEquals(302, $response->getStatusCode());
+      $this->assertEquals(
+        $config_factory->get('redirect.settings')->get('default_status_code'),
+        $response->getStatusCode()
+      );
     }
     else {
       $this->assertNull($event->getResponse());

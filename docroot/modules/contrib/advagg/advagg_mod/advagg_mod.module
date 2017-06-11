@@ -17,9 +17,9 @@ function advagg_mod_js_alter(&$js) {
 
   $css_defer = $config->get('css_defer');
 
-  //Use the current file system path for advagg_mod.
+  // Use the current file system path for advagg_mod.
   $module_path = drupal_get_path('module', 'advagg_mod');
-  if (advagg_mod_css_defer_active()) {
+  if (advagg_mod_css_defer_active() && isset($js[$module_path . '/js/loadCSS.js'])) {
     if ($css_defer == 3) {
       $js[$module_path . '/js/loadCSS.js']['scope'] = 'header';
       $js[$module_path . '/js/css_defer.js']['scope'] = 'header';
@@ -31,7 +31,7 @@ function advagg_mod_js_alter(&$js) {
     }
     elseif ($css_defer_js_code == 4) {
       $js[$module_path . '/js/loadCSS.js']['type'] = 'external';
-      $js[$module_path . '/js/loadCSS.js']['data'] = '//cdn.rawgit.com/filamentgroup/loadCSS/master/loadCSS.js';
+      $js[$module_path . '/js/loadCSS.js']['data'] = '//cdn.rawgit.com/filamentgroup/loadCSS/master/src/loadCSS.js';
     }
   }
 
@@ -141,6 +141,7 @@ function advagg_mod_advagg_asset_render_alter(&$assets, $render_type, $asset_typ
           if ($value['#tag'] == 'style') {
             continue;
           }
+          $value['#attributes']['class'][] = 'advagg-css-defer';
           $value['#noscript'] = TRUE;
         }
       }

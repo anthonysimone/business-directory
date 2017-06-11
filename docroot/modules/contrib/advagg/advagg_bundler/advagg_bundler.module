@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+
 /**
  * Implements hook_advagg_current_hooks_hash_array_alter().
  */

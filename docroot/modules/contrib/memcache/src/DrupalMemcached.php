@@ -32,6 +32,12 @@ class DrupalMemcached extends DrupalMemcacheBase {
     foreach ($this->settings->get('options', []) as $key => $value) {
       $this->memcache->setOption($key, $value);
     }
+
+    // SASL configuration to authenticate with Memcached.
+    // Note: this only affects the Memcached PECL extension.
+    if ($sasl_config = $this->settings->get('sasl', [])) {
+      $this->memcache->setSaslAuthData($sasl_config['username'], $sasl_config['password']);
+    }
   }
 
   /**
@@ -76,8 +82,12 @@ class DrupalMemcached extends DrupalMemcacheBase {
       $full_keys[$cid] = $full_key;
     }
 
-    $cas_tokens = NULL;
-    $results = $this->memcache->getMulti($full_keys, $cas_tokens, \Memcached::GET_PRESERVE_ORDER);
+    if (PHP_MAJOR_VERSION === 7) {
+      $results = $this->memcache->getMulti($full_keys, \Memcached::GET_PRESERVE_ORDER);
+    } else {
+      $cas_tokens = NULL;
+      $results = $this->memcache->getMulti($full_keys, $cas_tokens, \Memcached::GET_PRESERVE_ORDER);
+    }
 
     // If $results is FALSE, convert it to an empty array.
     if (!$results) {

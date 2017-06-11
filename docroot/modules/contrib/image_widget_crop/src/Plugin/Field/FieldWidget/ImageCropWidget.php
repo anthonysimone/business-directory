@@ -3,7 +3,8 @@
 namespace Drupal\image_widget_crop\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Config\Entity\ConfigEntityStorage;
+use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -36,7 +37,7 @@ class ImageCropWidget extends ImageWidget {
   /**
    * The image style storage.
    *
-   * @var \Drupal\Core\Config\Entity\ConfigEntityStorage
+   * @var \Drupal\image\ImageStyleStorageInterface
    */
   protected $imageStyleStorage;
 
@@ -62,7 +63,7 @@ class ImageCropWidget extends ImageWidget {
   /**
    * {@inheritdoc}
    */
-  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, ElementInfoManagerInterface $element_info, ImageWidgetCropManager $image_widget_crop_manager, ConfigEntityStorage $image_style_storage, ConfigEntityStorage $crop_type_storage, ConfigFactoryInterface $config_factory) {
+  public function __construct($plugin_id, $plugin_definition, FieldDefinitionInterface $field_definition, array $settings, array $third_party_settings, ElementInfoManagerInterface $element_info, ImageWidgetCropManager $image_widget_crop_manager, EntityStorageInterface $image_style_storage, ConfigEntityStorageInterface $crop_type_storage, ConfigFactoryInterface $config_factory) {
     parent::__construct($plugin_id, $plugin_definition, $field_definition, $settings, $third_party_settings, $element_info);
     $this->imageWidgetCropManager = $image_widget_crop_manager;
     $this->imageStyleStorage = $image_style_storage;
@@ -227,7 +228,7 @@ class ImageCropWidget extends ImageWidget {
 
     // Styles could be lost because of enabled/disabled modules that defines
     // their styles in code.
-    $image_style_setting = $image_styles[$this->getSetting('preview_image_style')];
+    $image_style_setting = $this->getSetting('preview_image_style');
     $crop_preview = $image_styles[$this->getSetting('crop_preview_image_style')];
     $crop_list = $this->getSetting('crop_list');
     $crop_show_button = $this->getSetting('show_crop_area');
@@ -238,7 +239,7 @@ class ImageCropWidget extends ImageWidget {
     $preview[] = $this->t('Show default crop area: @bool', ['@bool' => ($show_default_crop) ? 'Yes' : 'No']);
     $preview[] = $this->t('Warn the user if the crop is used more than once: @bool', ['@bool' => ($warn_multiple_usages) ? 'Yes' : 'No']);
 
-    if (isset($image_style_setting)) {
+    if (isset($image_styles[$image_style_setting])) {
       $preview[] = $this->t('Preview image style: @style', ['@style' => $image_style_setting]);
     }
     else {

@@ -262,7 +262,7 @@ abstract class BaseValidatorForm extends AdvaggFormBase {
    *   An associative array (keyed on the chosen key) of objects with 'uri',
    *   'filename', and 'name' members corresponding to the matching files.
    */
-  protected function scanDirectory($dir, $mask, $options = [], $depth = 0) {
+  protected function scanDirectory($dir, $mask, array $options = [], $depth = 0) {
     // Merge in defaults.
     $options += [
       'nomask' => '/(\.\.?|CVS)$/',
@@ -275,10 +275,16 @@ abstract class BaseValidatorForm extends AdvaggFormBase {
 
     $options['key'] = in_array($options['key'], ['uri', 'filename', 'name']) ? $options['key'] : 'uri';
     $files = [];
-    // @ignore druplart_andor_assignment
-    if (is_dir($dir) && $handle = opendir($dir)) {
-      while (FALSE !== ($filename = readdir($handle))) {
-        if (!preg_match($options['nomask'], $filename) && $filename[0] !== '.') {
+
+    if (is_dir($dir)) {
+      $handle = opendir($dir);
+      if ($handle) {
+        while (FALSE !== ($filename = readdir($handle))) {
+          // Skip if filename matches the nomask or is '.'.
+          if (preg_match($options['nomask'], $filename) || $filename[0] === '.') {
+            continue;
+          }
+
           $uri = "$dir/$filename";
           $uri = file_stream_wrapper_uri_normalize($uri);
           if (is_dir($uri) && $options['recurse'] && !preg_match($options['nodirmask'], $uri)) {
@@ -300,9 +306,9 @@ abstract class BaseValidatorForm extends AdvaggFormBase {
             }
           }
         }
-      }
 
-      closedir($handle);
+        closedir($handle);
+      }
     }
 
     return $files;
@@ -321,22 +327,6 @@ abstract class BaseValidatorForm extends AdvaggFormBase {
    */
   protected function testFiles(array $files, array $options = []) {
     return $files;
-  }
-
-  /**
-   * Parse an XML response from the validator.
-   *
-   * This function parses a SOAP 1.2 response XML string from the validator.
-   *
-   * @param string $xml
-   *   The raw SOAP 1.2 XML response from the validator.
-   *
-   * @return array
-   *   Info from the validator
-   */
-  private function parseSoapResponse($xml) {
-    $response = [];
-    return $response;
   }
 
   /**

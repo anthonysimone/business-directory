@@ -6,8 +6,13 @@ use Drupal\Component\Plugin\ConfigurablePluginInterface;
 use Solarium\Core\Client\Endpoint;
 use Solarium\Core\Client\Response;
 use Solarium\Core\Query\QueryInterface;
-use Solarium\Core\Query\Result\ResultInterface;
+use Solarium\QueryType\Extract\Result as ExtractResult;
+use Solarium\QueryType\Update\Query\Query as UpdateQuery;
+use Solarium\QueryType\Select\Query\Query;
 
+/**
+ *
+ */
 interface SolrConnectorInterface extends ConfigurablePluginInterface {
 
   /**
@@ -71,7 +76,7 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
   /**
    * Gets information about the Solr server.
    *
-   * @param boolean $reset
+   * @param bool $reset
    *   If TRUE the server will be asked regardless if a previous call is cached.
    *
    * @return object
@@ -84,7 +89,7 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
   /**
    * Gets information about the Solr Core.
    *
-   * @param boolean $reset
+   * @param bool $reset
    *   If TRUE the server will be asked regardless if a previous call is cached.
    *
    * @return object
@@ -107,7 +112,7 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
   /**
    * Gets the full schema version string the core is using.
    *
-   * @param boolean $reset
+   * @param bool $reset
    *   If TRUE the server will be asked regardless if a previous call is cached.
    *
    * @return string
@@ -118,11 +123,11 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
   /**
    * Gets the schema version number.
    *
-   * @param boolean $reset
+   * @param bool $reset
    *   If TRUE the server will be asked regardless if a previous call is cached.
    *
    * @return string
-   *   The full schema version string.
+   *   The schema version number.
    */
   public function getSchemaVersion($reset = FALSE);
 
@@ -203,7 +208,7 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
   public function serverRestPost($path, $command_json = '');
 
   /**
-   * Gets the current Solarium update query, creating one if necessary.
+   * Creates a new Solarium update query.
    *
    * @return \Solarium\QueryType\Update\Query\Query
    *   The Update query.
@@ -211,12 +216,36 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
   public function getUpdateQuery();
 
   /**
-   * Gets the current Solarium update query, creating one if necessary.
+   * Creates a new Solarium update query.
    *
    * @return \Solarium\QueryType\Select\Query\Query
    *   The Select query.
    */
   public function getSelectQuery();
+
+  /**
+   * Creates a new Solarium more like this query.
+   *
+   * @return \Solarium\QueryType\MorelikeThis\Query
+   *   The MoreLikeThis query.
+   */
+  public function getMoreLikeThisQuery();
+
+  /**
+   * Creates a new Solarium terms query.
+   *
+   * @return \Solarium\QueryType\Terms\Query
+   *   The Select query.
+   */
+  public function getTermsQuery();
+
+  /**
+   * Creates a new Solarium extract query.
+   *
+   * @return \Solarium\QueryType\Extract\Query
+   *   The Extract query.
+   */
+  public function getExtractQuery();
 
   /**
    * Returns a Solarium query helper object.
@@ -233,11 +262,11 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
    * Executes a search query and returns the raw response.
    *
    * @param \Solarium\QueryType\Select\Query\Query $query
-   * @param \Solarium\Core\Client\Endpoint|NULL $endpoint
+   * @param \Solarium\Core\Client\Endpoint|null $endpoint
    *
-   * @return Response
+   * @return \Solarium\Core\Client\Response
    */
-  public function search(\Solarium\QueryType\Select\Query\Query $query, Endpoint $endpoint = NULL);
+  public function search(Query $query, Endpoint $endpoint = NULL);
 
   /**
    * Creates a result from a response.
@@ -245,36 +274,56 @@ interface SolrConnectorInterface extends ConfigurablePluginInterface {
    * @param \Solarium\QueryType\Select\Query\Query $query
    * @param \Solarium\Core\Client\Response $response
    *
-   * @return ResultInterface
+   * @return \Solarium\Core\Query\Result\ResultInterface
    */
-  public function createSearchResult(\Solarium\QueryType\Select\Query\Query $query, Response $response);
+  public function createSearchResult(Query $query, Response $response);
 
   /**
    * Executes an update query and applies some tweaks.
    *
    * @param \Solarium\QueryType\Update\Query\Query $query
-   * @param \Solarium\Core\Client\Endpoint|NULL $endpoint
+   * @param \Solarium\Core\Client\Endpoint|null $endpoint
    *
-   * @return ResultInterface
+   * @return \Solarium\Core\Query\Result\ResultInterface
    */
-  public function update(\Solarium\QueryType\Update\Query\Query $query, Endpoint $endpoint = NULL);
+  public function update(UpdateQuery $query, Endpoint $endpoint = NULL);
 
   /**
    * Executes any query.
    *
    * @param \Solarium\Core\Query\QueryInterface $query
-   * @param \Solarium\Core\Client\Endpoint|NULL $endpoint
+   * @param \Solarium\Core\Client\Endpoint|null $endpoint
    *
-   * @return ResultInterface
+   * @return \Solarium\Core\Query\Result\ResultInterface
    */
   public function execute(QueryInterface $query, Endpoint $endpoint = NULL);
 
   /**
    * Optimizes the Solr index.
    *
-   * @param \Solarium\Core\Client\Endpoint|NULL $endpoint
+   * @param \Solarium\Core\Client\Endpoint|null $endpoint
    */
   public function optimize(Endpoint $endpoint = NULL);
+
+  /**
+   * Execute an extract query.
+   *
+   * @param \Solarium\Core\Query\QueryInterface|\Solarium\QueryType\Extract\Query $query
+   *
+   * @return \Solarium\QueryType\Extract\Result
+   */
+  public function extract(QueryInterface $query);
+
+  /**
+   * Gets the content from an extract query result.
+   *
+   * @param \Solarium\QueryType\Extract\Result $result
+   *
+   * @param string $filepath
+   *
+   * @return string
+   */
+  public function getContentFromExtractResult(ExtractResult $result, $filepath);
 
   /**
    * Returns an endpoint.

@@ -66,6 +66,9 @@ advagg.settings:
     js_fix_type:
       type: boolean
       label: 'Fix type of added asset files.'
+    js_preserve_external:
+      type: boolean
+      label: 'Do not change external to file if on same host for js.'
     root_dir_prefix:
       type: string
       label: 'Default root dir for the advagg files; controls advagg_get_root_files_dir().'

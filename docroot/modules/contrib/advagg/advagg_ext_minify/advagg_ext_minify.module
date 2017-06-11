@@ -19,7 +19,7 @@ function advagg_ext_minify_advagg_current_hooks_hash_array_alter(&$aggregate_set
 function advagg_ext_minify_advagg_js_minify_configuration_alter(&$options_desc, &$compressors, &$functions) {
 
   // Test that shell_exec works - may be disabled on many hosts.
-  if (!@shell_exec('dir')) {
+  if (!@shell_exec('ls') && !@shell_exec('dir')) {
     return;
   }
 
@@ -42,7 +42,7 @@ function advagg_ext_minify_advagg_js_minify_configuration_alter(&$options_desc, 
 function advagg_ext_minify_advagg_css_minify_configuration_alter(&$options_desc, &$compressors, &$functions) {
 
   // Test that shell_exec works - may be disabled on many hosts.
-  if (!@shell_exec('dir')) {
+  if (!@shell_exec('ls') && !@shell_exec('dir')) {
     return;
   }
 

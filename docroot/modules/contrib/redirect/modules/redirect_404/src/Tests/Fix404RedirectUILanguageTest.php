@@ -64,7 +64,7 @@ class Fix404RedirectUILanguageTest extends Redirect404TestBase {
     // Visit a non existing page to have the 404 redirect_error entry.
     $this->drupalGet('fr/testing');
 
-    $redirect = db_select('redirect_404')
+    $redirect = \Drupal::database()->select('redirect_404')
       ->fields('redirect_404')
       ->condition('path', '/testing')
       ->execute()

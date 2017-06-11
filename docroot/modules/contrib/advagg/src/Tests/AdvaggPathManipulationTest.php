@@ -19,13 +19,6 @@ class AdvaggPathManipulationTest extends AdvaggTestBase {
   public static $modules = ['advagg', 'advagg_test'];
 
   /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-  }
-
-  /**
    * Tests force_https.
    */
   public function testForceHttps() {

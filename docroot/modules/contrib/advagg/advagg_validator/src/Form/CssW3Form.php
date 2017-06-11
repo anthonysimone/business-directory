@@ -37,7 +37,6 @@ class CssW3Form extends BaseValidatorForm {
    *
    * @param \GuzzleHttp\Client $http_client
    *   The Guzzle HTTP Client.
-   *
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The Drupal renderer.
    */
@@ -217,7 +216,7 @@ class CssW3Form extends BaseValidatorForm {
    * @return array
    *   Info from the w3c server.
    */
-  private function testW3C($filename, &$validator_options = array()) {
+  private function testW3C($filename, array &$validator_options = []) {
     // Get CSS files contents.
     $validator_options['text'] = file_get_contents($filename);
     if (strlen($validator_options['text']) > 50000) {

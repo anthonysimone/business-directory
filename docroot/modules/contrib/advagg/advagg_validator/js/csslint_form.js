@@ -11,7 +11,7 @@
  * Have clicks to advagg_validator_css classes run CSSLint clientside.
  */
 (function ($) {
-  "use strict";
+  'use strict';
   Drupal.behaviors.advagg_validator_css_simple = {
     attach: function (context, settings) {
       $('.advagg_validator_css', context).click(function (context) {
@@ -37,7 +37,7 @@
  * Have clicks to advagg_validator_recursive_css classes run CSSLint clientside.
  */
 (function ($) {
-  "use strict";
+  'use strict';
   Drupal.behaviors.advagg_validator_css_recursive = {
     attach: function (context, settings) {
       $('.advagg_validator_recursive_css', context).click(function (context) {
@@ -71,14 +71,15 @@
  *   The drupal settings object.
  */
 function advagg_validator_css($, results, filename, settings) {
+  'use strict';
   try {
     // Use the current time to bust the browser cache.
     var t = new Date().getTime();
-    var x = jQuery.ajax({
+    jQuery.ajax({
       url: settings.path.baseUrl + filename + '?t=' + t,
       dataType: 'text',
       async: false,
-      success: function(data) {
+      success: function (data) {
         // File was downloaded; run through CSSLint.
         var y = CSSLint.verify(data, settings.csslint.rules);
         var z = y.messages;
@@ -90,7 +91,7 @@ function advagg_validator_css($, results, filename, settings) {
         }
         $(results).append('</ul></p>');
       },
-      error: function(data, textStatus, errorThrown) {
+      error: function (data, textStatus, errorThrown) {
         // File could not be downloaded; display error.
         $(results).append('<p><h4>' + filename + '</h4><ul>');
         $(results).append('<li class="error">' + Drupal.t('Browser unable to read file. @error', {'@error': errorThrown}) + '</li>');

@@ -38,9 +38,6 @@ advagg_mod.settings:
     js_defer:
       type: integer
       label: 'Default value to add the defer tag to all script tags.'
-    js_get_external_dns:
-      type: boolean
-      label: 'Default value to scan html for src tags and do a DNS prefetch on it.'
     js_footer:
       type: integer
       label: 'Default value to move all JS to the footer.'

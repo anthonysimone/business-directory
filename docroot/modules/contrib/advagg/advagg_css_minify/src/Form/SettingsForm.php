@@ -92,30 +92,43 @@ class SettingsForm extends ConfigFormBase {
     $form = [];
     if ($this->config('advagg.settings')->get('cache_level') < 0) {
       $form['advagg_devel_msg'] = [
-        '#markup' => '<p>' . t('The settings below will not have any effect because AdvAgg is currently in <a href="@devel">development mode</a>. Once the cache settings have been set to normal or higher, CSS minification will take place.', [
+        '#markup' => '<p>' . $this->t('The settings below will not have any effect because AdvAgg is currently in <a href="@devel">development mode</a>. Once the cache settings have been set to normal or higher, CSS minification will take place.', [
           '@devel' => Url::fromRoute('advagg.settings', [], [
             'fragment' => 'edit-advagg-cache-level',
           ])->toString(),
         ]) . '</p>',
       ];
     }
+    if (method_exists($this->optimizer, 'getConfiguration')) {
+      list($options, $description) = $this->optimizer->getConfiguration();
+    }
+    else {
+      $description = '';
+      $options = [
+        0 => $this->t('Disabled'),
+        1 => $this->t('Core'),
+        2 => $this->t('YUI'),
+      ];
 
-    list($options, $description) = $this->optimizer->getConfiguration();
+      // Allow for other modules to alter this list.
+      $options_desc = [$options, $description];
+      list($options, $description) = $options_desc;
+    }
 
     $form['minifier'] = [
       '#type' => 'radios',
-      '#title' => t('Minification: Select a default minifier'),
+      '#title' => $this->t('Minification: Select a default minifier'),
       '#default_value' => $config->get('minifier'),
       '#options' => $options,
       '#description' => Xss::filter($description),
     ];
 
-    $options[-1] = t('Default');
+    $options[-1] = $this->t('Default');
     ksort($options);
 
     $form['per_file_settings'] = [
       '#type' => 'details',
-      '#title' => t('Per File Settings'),
+      '#title' => $this->t('Per File Settings'),
     ];
     $files = $this->advaggFiles->getAll();
     $file_settings = $config->get('file_settings');
@@ -136,7 +149,7 @@ class SettingsForm extends ConfigFormBase {
       $form_api_filename = str_replace(['/', '.'], ['__', '--'], $name);
       $form['per_file_settings'][$dir]['advagg_css_minify_file_settings_' . $form_api_filename] = [
         '#type' => 'radios',
-        '#title' => t('%filename: Select a minifier', ['%filename' => $name]),
+        '#title' => $this->t('%filename: Select a minifier', ['%filename' => $name]),
         '#default_value' => isset($file_settings[$name]) ? $file_settings[$name] : -1,
         '#options' => $options,
       ];
@@ -148,7 +161,7 @@ class SettingsForm extends ConfigFormBase {
 
     // No css files are found.
     if (empty($files)) {
-      $form['per_file_settings']['#description'] = t('No CSS files have been aggregated. You need to enable aggregation. No css files where found in the advagg_files table.');
+      $form['per_file_settings']['#description'] = $this->t('No CSS files have been aggregated. You need to enable aggregation. No css files where found in the advagg_files table.');
     }
     return parent::buildForm($form, $form_state);
   }

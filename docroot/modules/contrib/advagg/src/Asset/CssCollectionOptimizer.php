@@ -140,7 +140,7 @@ class CssCollectionOptimizer extends CoreCssCollectionOptimizer implements Asset
               $group_file_info = $this->advaggFiles->getMultiple(array_column($css_group['items'], 'data'));
 
               // Add aggregate & page to advaggFiles store per included file.
-              foreach ($group_file_info as $k => &$file) {
+              foreach ($group_file_info as &$file) {
                 $file['aggregates'][] = $key;
                 $file['pages'][] = $page_uri;
               }

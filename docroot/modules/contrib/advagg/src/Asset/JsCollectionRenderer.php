@@ -36,8 +36,8 @@ class JsCollectionRenderer extends CoreJsCollectionRenderer implements AssetColl
    */
   public function render(array $js_assets) {
     // Check assets array to ensure that it isn't malformed.
-    if (count($js_assets) === 1 && isset($js_assets['-1']) && empty($js_assets[-1])) {
-      $js_assets = [];
+    if (isset($js_assets['-1']) && empty($js_assets[-1])) {
+      unset($js_assets['-1']);
     }
 
     $elements = ['prefetch' => []];

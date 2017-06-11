@@ -24,3 +24,7 @@ services:
     arguments: ['@url_generator', '@path.matcher', '@config.factory', '@redirect.checker']
     tags:
       - { name: event_subscriber }
+  redirect.route_subscriber:
+    class: Drupal\redirect\Routing\RouteSubscriber
+    tags:
+      - { name: event_subscriber }

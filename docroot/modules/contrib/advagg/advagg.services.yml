@@ -42,7 +42,7 @@ services:
     arguments: [advagg_minify]
   state.advagg.aggregates:
     class: Drupal\advagg\State\Aggregates
-    arguments: ['@keyvalue']
+    arguments: ['@keyvalue', '@cache.bootstrap', '@lock']
   state.advagg.files:
     class: Drupal\advagg\State\Files
-    arguments: ['@keyvalue', '@config.factory', '@module_handler', '@asset.css.dumper' ]
+    arguments: ['@keyvalue', '@config.factory', '@module_handler', '@asset.css.dumper', '@cache.bootstrap', '@lock']

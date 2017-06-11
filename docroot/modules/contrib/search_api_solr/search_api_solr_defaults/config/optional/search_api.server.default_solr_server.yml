@@ -9,6 +9,9 @@ backend_config:
   retrieve_data: false
   highlight_data: true
   skip_schema_check: false
+  suggest_suffix: true
+  suggest_corrections: true
+  suggest_words: false
   connector: standard
   connector_config:
     scheme: http
@@ -21,6 +24,7 @@ backend_config:
     optimize_timeout: 15
     solr_version: ''
     http_method: AUTO
+    commit_within: 1000
 langcode: en
 dependencies:
   module:

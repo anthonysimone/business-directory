@@ -3,14 +3,12 @@
 namespace Drupal\search_api_solr\SolrConnector;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Annotation\Translation;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Url;
 use Drupal\search_api\Plugin\ConfigurablePluginBase;
 use Drupal\search_api\Plugin\PluginFormTrait;
-use Drupal\search_api_solr\Annotation\SolrConnector;
 use Drupal\search_api_solr\SearchApiSolrException;
 use Drupal\search_api_solr\SolrConnectorInterface;
 use Solarium\Client;
@@ -20,7 +18,10 @@ use Solarium\Core\Client\Response;
 use Solarium\Core\Query\Helper;
 use Solarium\Core\Query\QueryInterface;
 use Solarium\Exception\HttpException;
+use Solarium\QueryType\Extract\Result as ExtractResult;
+use Solarium\QueryType\Update\Query\Query as UpdateQuery;
 use Solarium\QueryType\Select\Query\Query;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Defines a base class for Solr connector plugins.
@@ -56,11 +57,29 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   }
 
   /**
+   * The event dispatcher.
+   *
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+   */
+  protected $eventDispatcher;
+
+  /**
    * A connection to the Solr server.
    *
    * @var \Solarium\Client
    */
   protected $solr;
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
+    $plugin = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+
+    $plugin->eventDispatcher = $container->get('event_dispatcher');
+
+    return $plugin;
+  }
 
   /**
    * {@inheritdoc}
@@ -77,6 +96,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       'optimize_timeout' => 10,
       'solr_version' => '',
       'http_method' => 'AUTO',
+      'commit_within' => 1000,
     ];
   }
 
@@ -155,6 +175,15 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
       '#required' => TRUE,
     );
 
+    $form['commit_within'] = array(
+      '#type' => 'number',
+      '#min' => 0,
+      '#title' => $this->t('Commit within'),
+      '#description' => $this->t('The limit in milliseconds within a (soft) commit on Solr is forced after any updating the index in any way. Setting the value to "0" turns off this dynamic enforcement and lets Solr behave like configured solrconf.xml.'),
+      '#default_value' => isset($this->configuration['commit_within']) ? $this->configuration['commit_within'] : 1000,
+      '#required' => TRUE,
+    );
+
     $form['workarounds'] = array(
       '#type' => 'fieldset',
       '#title' => $this->t('Connector Workarounds'),
@@ -207,11 +236,12 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
 
     if (!$form_state->hasAnyErrors()) {
       // Try to orchestrate a server link from form values.
-      $solr = new Client();
+      $solr = new Client(NULL, $this->eventDispatcher);
       $solr->createEndpoint($values + ['key' => 'core'], TRUE);
       try {
         $this->getServerLink();
-      } catch (\InvalidArgumentException $e) {
+      }
+      catch (\InvalidArgumentException $e) {
         foreach (['scheme', 'host', 'port', 'path', 'core'] as $part) {
           $form_state->setError($form[$part], $this->t('The server link generated from the form values is illegal.'));
         }
@@ -243,7 +273,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
    */
   protected function connect() {
     if (!$this->solr) {
-      $this->solr = new Client();
+      $this->solr = new Client(NULL, $this->eventDispatcher);
       $this->solr->createEndpoint($this->configuration + ['key' => 'core'], TRUE);
       $this->attachServerEndpoint();
     }
@@ -396,7 +426,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * Gets data from a Solr endpoint using a given handler.
    *
-   * @param boolean $reset
+   * @param bool $reset
    *   If TRUE the server will be asked regardless if a previous call is cached.
    *
    * @return object
@@ -514,7 +544,13 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
         $summary['@deletes_total'] = $summary['@deletes_by_id'] + $summary['@deletes_by_query'];
         $summary['@schema_version'] = $this->getSchemaVersionString(TRUE);
         $summary['@core_name'] = $stats['solr-mbeans']['CORE']['core']['stats']['coreName'];
-        $summary['@index_size'] = $stats['solr-mbeans']['QUERYHANDLER']['/replication']['stats']['indexSize'];
+        if (version_compare($this->getSolrVersion(), '6.4', '>=')) {
+          // @see https://issues.apache.org/jira/browse/SOLR-3990
+          $summary['@index_size'] = $stats['solr-mbeans']['CORE']['core']['stats']['size'];
+        }
+        else {
+          $summary['@index_size'] = $stats['solr-mbeans']['QUERYHANDLER']['/replication']['stats']['indexSize'];
+        }
       }
       return $summary;
     }
@@ -586,7 +622,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     $response = $this->solr->executeRequest($request, $endpoint);
     $endpoint->setTimeout($timeout);
     $output = Json::decode($response->getBody());
-    // \Drupal::logger('search_api_solr')->info(print_r($output, true));
+    // \Drupal::logger('search_api_solr')->info(print_r($output, true));.
     if (!empty($output['errors'])) {
       throw new SearchApiSolrException('Error trying to send a REST request.' .
         "\nError message(s):" . print_r($output['errors'], TRUE));
@@ -613,12 +649,36 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
+  public function getMoreLikeThisQuery() {
+    $this->connect();
+    return $this->solr->createMoreLikeThis();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTermsQuery() {
+    $this->connect();
+    return $this->solr->createTerms();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getQueryHelper(QueryInterface $query = NULL) {
     if ($query) {
       return $query->getHelper();
     }
 
     return new Helper();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getExtractQuery() {
+    $this->connect();
+    return $this->solr->createExtract();
   }
 
   /**
@@ -632,7 +692,7 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
-  public function search(\Solarium\QueryType\Select\Query\Query $query, Endpoint $endpoint = NULL) {
+  public function search(Query $query, Endpoint $endpoint = NULL) {
     $this->connect();
 
     if (!$endpoint) {
@@ -664,14 +724,14 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
-  public function createSearchResult(\Solarium\QueryType\Select\Query\Query $query, Response $response) {
+  public function createSearchResult(Query $query, Response $response) {
     return $this->solr->createResult($query, $response);
   }
 
   /**
    * {@inheritdoc}
    */
-  public function update(\Solarium\QueryType\Update\Query\Query $query, Endpoint $endpoint = NULL) {
+  public function update(UpdateQuery $query, Endpoint $endpoint = NULL) {
     $this->connect();
 
     if (!$endpoint) {
@@ -682,19 +742,20 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
     // distinguish between these types.
     $timeout = $endpoint->getTimeout();
     $endpoint->setTimeout($this->configuration['index_timeout']);
-    // Do a commitWithin since that is automatically a softCommit with Solr 4
-    // and a delayed hard commit with Solr 3.4+.
-    // We wait 1 second after the request arrived for solr to parse the
-    // commit. This allows us to return to Drupal and let Solr handle what it
-    // needs to handle.
-    // @see http://wiki.apache.org/solr/NearRealtimeSearch
-    /** @var \Solarium\Plugin\CustomizeRequest\CustomizeRequest $request */
-    $request = $this->customizeRequest();
-    $request->createCustomization('id')
-      ->setType('param')
-      // @todo commitWithin should be configurable or removed for Solr > 4.0.x.
-      ->setName('commitWithin')
-      ->setValue('1000');
+    if ($this->configuration['commit_within']) {
+      // Do a commitWithin since that is automatically a softCommit since Solr 4
+      // and a delayed hard commit with Solr 3.4+.
+      // By default we wait 1 second after the request arrived for solr to parse
+      // the commit. This allows us to return to Drupal and let Solr handle what
+      // it needs to handle.
+      // @see http://wiki.apache.org/solr/NearRealtimeSearch
+      /** @var \Solarium\Plugin\CustomizeRequest\CustomizeRequest $request */
+      $request = $this->customizeRequest();
+      $request->createCustomization('id')
+        ->setType('param')
+        ->setName('commitWithin')
+        ->setValue($this->configuration['commit_within']);
+    }
 
     $result = $this->solr->execute($query, $endpoint);
 
@@ -744,9 +805,26 @@ abstract class SolrConnectorPluginBase extends ConfigurablePluginBase implements
   /**
    * {@inheritdoc}
    */
+  public function extract(QueryInterface $query) {
+    $this->connect();
+    return $this->solr->extract($query);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getContentFromExtractResult(ExtractResult $result, $filepath){
+    $response = $result->getResponse();
+    $json_data = $response->getBody();
+    $array_data = Json::decode($json_data);
+    return $array_data[$filepath];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getEndpoint($key = 'core') {
     $this->connect();
-    $this->solr->createMoreLikeThis(array('handler' => 'select'));
     return $this->solr->getEndpoint($key);
   }
 

@@ -125,7 +125,7 @@ class InfoForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form = [];
     $form['tip'] = [
-      '#markup' => '<p>' . t('This page provides debugging information. There are no configuration options here.') . '</p>',
+      '#markup' => '<p>' . $this->t('This page provides debugging information. There are no configuration options here.') . '</p>',
     ];
 
     // Get all hooks and variables.
@@ -135,7 +135,7 @@ class InfoForm extends ConfigFormBase {
     // Output html preprocess functions hooks.
     $form['theme_info'] = [
       '#type' => 'details',
-      '#title' => t('Hook Theme Info'),
+      '#title' => $this->t('Hook Theme Info'),
     ];
     $data = implode("\n", $core_hooks['html']['preprocess functions']);
     $form['theme_info']['advagg_theme_info'] = [
@@ -149,7 +149,7 @@ class InfoForm extends ConfigFormBase {
     foreach ($types as $type) {
       $form[$type] = [
         '#type' => 'details',
-        '#title' => t('@type files', ['@type' => Unicode::strtoupper($type)]),
+        '#title' => $this->t('@type files', ['@type' => Unicode::strtoupper($type)]),
       ];
     }
     foreach ($file_data as $name => $info) {
@@ -184,11 +184,11 @@ class InfoForm extends ConfigFormBase {
 
     $form['modules_implementing_advagg'] = [
       '#type' => 'details',
-      '#title' => t('Modules implementing aggregate hooks'),
+      '#title' => $this->t('Modules implementing aggregate hooks'),
     ];
     $form['hooks_implemented'] = [
       '#type' => 'details',
-      '#title' => t('AdvAgg CSS/JS hooks implemented by modules'),
+      '#title' => $this->t('AdvAgg CSS/JS hooks implemented by modules'),
     ];
 
     // Output all advagg hooks implemented.
@@ -222,10 +222,10 @@ class InfoForm extends ConfigFormBase {
     // Output what is used inside of advagg_get_current_hooks_hash().
     $form['hooks_variables_hash'] = [
       '#type' => 'details',
-      '#title' => t('Hooks And Variables Used In Hash'),
+      '#title' => $this->t('Hooks And Variables Used In Hash'),
     ];
     $form['hooks_variables_hash']['description'] = [
-      '#markup' => t('Current Value: %value. Below is the listing of variables and hooks used to generate the 3rd hash of an aggregates filename.', ['%value' => advagg_get_current_hooks_hash()]),
+      '#markup' => $this->t('Current Value: %value. Below is the listing of variables and hooks used to generate the 3rd hash of an aggregates filename.', ['%value' => advagg_get_current_hooks_hash()]),
     ];
     $form['hooks_variables_hash']['output'] = [
       // @ignore production_php
@@ -235,18 +235,18 @@ class InfoForm extends ConfigFormBase {
     $form['get_info_about_agg'] = [
       '#type' => 'details',
       '#open' => TRUE,
-      '#title' => t('Get detailed info about an aggregate file'),
+      '#title' => $this->t('Get detailed info about an aggregate file'),
     ];
     $form['get_info_about_agg']['filename'] = [
       '#type' => 'textfield',
       '#size' => 170,
       '#maxlength' => 256,
       '#default_value' => '',
-      '#title' => t('Filename'),
+      '#title' => $this->t('Filename'),
     ];
     $form['get_info_about_agg']['submit'] = [
       '#type' => 'submit',
-      '#value' => t('Lookup Details'),
+      '#value' => $this->t('Lookup Details'),
       '#submit' => ['::getFileInfoSubmit'],
       '#validate' => ['::getFileInfoValidate'],
       '#ajax' => [
@@ -256,7 +256,7 @@ class InfoForm extends ConfigFormBase {
       ],
     ];
     $form['get_info_about_agg']['tip'] = [
-      '#markup' => '<p>' . t('Takes input like "@css_file" or a full aggregate name like "@advagg_js"', [
+      '#markup' => '<p>' . $this->t('Takes input like "@css_file" or a full aggregate name like "@advagg_js"', [
         '@css_file' => $this->advaggFiles->getRandomKey(),
         '@advagg_js' => $this->advaggAggregates->getRandom()['uid'],
       ]) . '</p>',
@@ -318,7 +318,7 @@ class InfoForm extends ConfigFormBase {
     }
     $info = $this->getFileInfo($form_state->getValue('filename'));
     if (empty($info)) {
-      $form_state->setErrorByName('filename', t('Please input a valid aggregate filename.'));
+      $form_state->setErrorByName('filename', $this->t('Please input a valid aggregate filename.'));
       return $element;
     }
     else {
@@ -337,7 +337,7 @@ class InfoForm extends ConfigFormBase {
    */
   public function getFileInfoValidate(array &$form, FormStateInterface $form_state) {
     if (empty($form_state->getValue('filename'))) {
-      $form_state->setErrorByName('filename', t('Please input an aggregate filename.'));
+      $form_state->setErrorByName('filename', $this->t('Please input an aggregate filename.'));
     }
   }
 
