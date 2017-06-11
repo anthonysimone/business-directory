@@ -124,3 +124,14 @@ elseif (file_exists(__DIR__ . '/settings.drupalvm.php')) {
 if(file_exists(__DIR__ . '/settings.local.php')) {
   include __DIR__ . '/settings.local.php';
 }
+
+$databases['default']['default'] = array (
+  'database' => 'busdir_dev',
+  'username' => 'busdir_user',
+  'password' => '070m783YI8Sk02z',
+  'prefix' => '',
+  'host' => 'localhost',
+  'port' => '3306',
+  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+  'driver' => 'mysql',
+);
