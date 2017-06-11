@@ -127,8 +127,8 @@ if(file_exists(__DIR__ . '/settings.local.php')) {
 
 $databases['default']['default'] = array (
   'database' => 'busdir_dev',
-  'username' => 'busdir_user',
-  'password' => '070m783YI8Sk02z',
+  'username' => 'forge',
+  'password' => '875KQSGy4PSeXQLF4Gyl',
   'prefix' => '',
   'host' => 'localhost',
   'port' => '3306',
