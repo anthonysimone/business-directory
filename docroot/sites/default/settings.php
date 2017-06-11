@@ -79,10 +79,8 @@ $settings['install_profile'] = 'standard';
 // and any additional version thereof.
 // Additional env specific patterns can be added in the following files (drupalvm, local)
 $settings['trusted_host_patterns'] = array(
-  '^e3develop\.com$',
-  '^.+\.e3develop\.com$',
-  '^e3staging\.com$',
-  '^.+\.e3staging\.com$',
+  '^organyzr\.com$',
+  '^.+\.organyzr\.com$',
 );
 
 // Set default paths to public, private and temp directories.
