@@ -114,22 +114,22 @@ if(getenv('FORGE_SITE_ENVIRONMENT'))  {
 //  }
 //}
 // If drupal-vm settings exist, load them.
-//elseif (file_exists(__DIR__ . '/settings.drupalvm.php')) {
-//  include __DIR__ . '/settings.drupalvm.php';
-//}
-
-// If local settings file exists, load it.
-if(file_exists(__DIR__ . '/settings.local.php')) {
-  include __DIR__ . '/settings.local.php';
+elseif (file_exists(__DIR__ . '/settings.drupalvm.php')) {
+  include __DIR__ . '/settings.drupalvm.php';
 }
 
-$databases['default']['default'] = array (
-  'database' => 'busdir_dev',
-  'username' => 'busdir_user',
-  'password' => '070m783YI8Sk02z',
-  'prefix' => '',
-  'host' => '67.205.190.2',
-  'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-  'driver' => 'mysql',
-);
+// If local settings file exists, load it.
+//if(file_exists(__DIR__ . '/settings.local.php')) {
+//  include __DIR__ . '/settings.local.php';
+//}
+//
+//$databases['default']['default'] = array (
+//  'database' => 'busdir_dev',
+//  'username' => 'busdir_user',
+//  'password' => '070m783YI8Sk02z',
+//  'prefix' => '',
+//  'host' => '67.205.190.2',
+//  'port' => '3306',
+//  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+//  'driver' => 'mysql',
+//);
