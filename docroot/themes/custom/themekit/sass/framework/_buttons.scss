@@ -1,0 +1,44 @@
+////
+/// Framework - Buttons
+////
+
+
+$buttons: (
+  default: (
+    background: #777,
+    color: #fff,
+    border: #ccc,
+    active-background: #555,
+    active-color: #fff,
+    active-border: #ccc
+  )
+) !default;
+
+
+@mixin btn($button-key, $size: small) {
+  $button: extend-in-map($buttons, $button-key);
+
+  @include disable-mouse-outline;
+  display: inline-block;
+  line-height: 1;
+  font-weight: 400;
+
+  appearance: none;
+  border: 2px solid key($button, border);
+  background: key($button, background);
+  color: key($button, color);
+
+  @if ($size == small) {
+    padding: 8px 12px;
+    font-size: 14px;
+  } @else if ($size == large) {
+    padding: 12px 20px;
+    font-size: 16px;
+  }
+
+  @include selectors(active) {
+    border-color: key($button, active-border);
+    background: key($button, active-background);
+    color: key($button, active-color);
+  }
+}

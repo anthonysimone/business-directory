@@ -1,0 +1,6 @@
+uuid: fc211b7c-8813-4db5-affd-b3834cb0bfc0
+langcode: en
+status: true
+dependencies: {  }
+id: slider_banner_standard
+label: 'Slider - Banner Standard'

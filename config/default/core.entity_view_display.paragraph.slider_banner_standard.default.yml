@@ -1,0 +1,14 @@
+uuid: 60543af7-df43-4ebb-bd9e-4d7686d7a263
+langcode: en
+status: true
+dependencies:
+  config:
+    - paragraphs.paragraphs_type.slider_banner_standard
+id: paragraph.slider_banner_standard.default
+targetEntityType: paragraph
+bundle: slider_banner_standard
+mode: default
+content: {  }
+hidden:
+  created: true
+  uid: true

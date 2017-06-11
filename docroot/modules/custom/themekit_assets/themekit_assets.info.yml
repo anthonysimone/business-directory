@@ -1,0 +1,5 @@
+name: Themekit Assets
+type: module
+description: Adds further control over themkit assets
+package: Theme
+core: 8.x

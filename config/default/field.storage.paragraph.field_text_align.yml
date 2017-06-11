@@ -1,0 +1,27 @@
+uuid: de099ae7-126f-452b-aeee-df7065599ec1
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paragraphs
+id: paragraph.field_text_align
+field_name: field_text_align
+entity_type: paragraph
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: left
+      label: '<img src="/themes/custom/themekit/images/svg/text-left.svg" width="60" />'
+    -
+      value: right
+      label: '<img src="/themes/custom/themekit/images/svg/text-right.svg" width="60" />'
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,6 @@
+uuid: 3ba58c48-5ed6-4f63-9286-5d973df10815
+langcode: en
+status: true
+dependencies: {  }
+id: banner_standard
+label: 'Banner - Standard'

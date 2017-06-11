@@ -1,0 +1,21 @@
+uuid: 3a605f7b-6332-44b8-9ac3-17e6f9285964
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_summary
+    - paragraphs.paragraphs_type.banner_standard
+  module:
+    - text
+id: paragraph.banner_standard.field_summary
+field_name: field_summary
+entity_type: paragraph
+bundle: banner_standard
+label: Summary
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

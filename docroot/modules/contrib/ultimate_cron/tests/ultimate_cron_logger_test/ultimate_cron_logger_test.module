@@ -1,0 +1,22 @@
+<?php
+/**
+ * @file
+ * Contains ultimate_cron_logger_test.module..
+ */
+
+/**
+ * Implements hook_cron().
+ */
+function ultimate_cron_logger_test_cron() {
+  $action = \Drupal::state()->get('ultimate_cron_logger_test_cron_action');
+
+  if ($action == 'exception') {
+    throw new Exception('Test cron exception');
+  }
+  elseif ($action == 'fatal') {
+    call_to_undefined_function();
+  }
+  elseif ($action == 'log_warning') {
+    \Drupal::logger('ultimate_cron_logger_test_cron')->warning('This is a warning message');
+  }
+}

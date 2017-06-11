@@ -1,0 +1,91 @@
+////
+/// Mixins and functions that extend foundation default functionality
+/// @group foundation-extensions
+////
+
+
+/// Sizes DIRECT child elements so that `$n` number of items appear on each row.
+/// @param {Number} $n - Number of elements to display per row.
+/// @param {String} $selector ['.column'] - Selector(s) to use for child elements.
+@mixin grid-layout-child(
+  $n,
+  $selector: '.column'
+) {
+  > #{$selector} {
+    width: percentage(1/$n);
+    float: $global-left;
+
+    &:nth-of-type(1n) {
+      clear: none;
+    }
+
+    &:nth-of-type(#{$n}n+1) {
+      clear: both;
+    }
+
+    &:last-child {
+      float: left;
+    }
+  }
+}
+
+
+/// This block grid variation only applies styles to DIRECT children, which is generally the intended effect.
+/// @param {Number} $number [1] - Number of items to display per row
+/// @param {String} $selector ['.column'] - The css selector to use as the child selector
+/// @param {Number} $bottom-gutter [15] - The number of pixels for the bottom margin of each item
+/// @param {String} $gutter [30px] - Gutter size in pixels
+/// @param {String} $behavior [nest] - Takes options 'nest' or 'collapse' or 'null', can take both 'nest collapse'
+@mixin block-grid($number: 1, $selector: '.column', $bottom-gutter: 15, $gutter: 30px, $behavior: nest) {
+  > #{$selector} {
+    @include grid-column($gutter: $gutter);
+    margin-bottom: #{$bottom-gutter}px;
+    &:last-child {
+      @include grid-column-end();
+    }
+  }
+  @include grid-row($behavior: $behavior, $gutter: $gutter);
+  @include grid-layout-child($number, $selector);
+
+  @if ($behavior == nest) {
+    $margin: rem-calc($gutter) / 2 * -1;
+    margin: 0 $margin;
+  }
+}
+
+
+/// Flex Grid - Implements a block grid on DIRECT child elements so that `$n` number of items appear on each row.
+/// @param {Number} $n - Number of elements to display per row.
+/// @param {String} $grid-item-selector ['.field__item'] - Selector(s) to use for child elements.
+/// @param {String} $gutter [30px] - Side gutter value
+/// @param {String} $bottom-gutter [30px] - Bottom gutter value
+@mixin flex-block-grid($n: 1, $grid-item-selector: '.field__item', $gutter: 30px, $bottom-gutter: 30px) {
+  @include flex-grid-row(nest);
+  @include flex-grid-layout($n, $grid-item-selector);
+  margin: 0 -#{$gutter/2};
+  & > #{$grid-item-selector} {
+    margin-top: $bottom-gutter;
+    padding: 0 #{$gutter/2};
+    @for $i from 1 through $n {
+      &:nth-child(#{$i}) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+
+/// Header style mixin - This mixin includes the responsive header sizes set in _settings.scss. Those are the default
+/// sizes for headers, but you can use this mixin when you want to apply the default header sizes with breakpoints to
+/// other elements.
+/// @param {String} $h - The header element to get sizes for (h1, h2 ...)
+@mixin header-font-size($h, $with-line-height: true) {
+  @if ($with-line-height == true) {
+    line-height: $header-lineheight;
+  }
+  @each $size, $headers in $header-styles {
+    @include breakpoint($size) {
+      font-size: rem-calc(map-get(map-get($headers, $h), 'font-size'));
+    }
+  }
+}

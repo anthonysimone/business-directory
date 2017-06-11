@@ -1,0 +1,23 @@
+uuid: b71f6081-d6c0-4543-a3b0-01e79bd72866
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_primary_link
+    - paragraphs.paragraphs_type.banner_standard
+  module:
+    - link
+id: paragraph.banner_standard.field_primary_link
+field_name: field_primary_link
+entity_type: paragraph
+bundle: banner_standard
+label: 'Primary Link'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 2
+field_type: link

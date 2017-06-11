@@ -1,0 +1,6 @@
+uuid: cada7c4c-f823-4b7d-b4c8-038f967526a6
+langcode: en
+status: true
+dependencies: {  }
+id: summary_articles
+label: 'Summary - Articles'

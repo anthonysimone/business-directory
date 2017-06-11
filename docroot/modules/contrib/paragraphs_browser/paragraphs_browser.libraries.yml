@@ -1,0 +1,6 @@
+modal:
+  version: VERSION
+  js:
+    js/paragraphs_browser.modal.js: {}
+  dependencies:
+    - core/drupal.dialog.ajax

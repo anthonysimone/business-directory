@@ -1,0 +1,23 @@
+////
+/// Framework - Links
+////
+
+$links: (
+  default: (
+    color: navy,
+    font-weight: 400,
+    active-color: skyblue
+  )
+) !default;
+
+@mixin link($conf: default) {
+  $link-conf: extend-in-map($links, $conf);
+
+  color: key($link-conf, color);
+  font-weight: key($link-conf, font-weight);
+
+  @include selectors(active) {
+    color: key($link-conf, active-color);
+    text-decoration: underline;
+  }
+}

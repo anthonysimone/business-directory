@@ -1,0 +1,95 @@
+<?php
+/**
+ * Implements hook_page_attachments().
+ */
+function themekit_assets_page_attachments(array &$page) {
+  $theme_name = \Drupal::theme()->getActiveTheme()->getName();
+  $config = \Drupal::config('themekit_assets.settings');
+
+  if ($config->get('admin_assets') && $theme_name == 'adminimal_theme') {
+    $page['#attached']['library'][] = 'themekit_assets/tk-admin';
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function themekit_assets_library_info_alter(&$libraries, $extension) {
+  // Only add the Chosen CSS if it is not disabled for the active theme.
+  $theme_name = \Drupal::theme()->getActiveTheme()->getName();
+
+  // Types of assets we want to process.
+  $asset_matchers = ['css', 'js'];
+
+  if ($theme_name == 'themekit' && $extension == 'themekit') {
+    // Replace the existing libraries with processed version.
+    $libraries = themekit_assets_process_libraries($libraries, $asset_matchers);
+  }
+}
+
+/**
+ * Process a libraries array and modify the paths of any assets with the "compile"
+ * key set to true, to use the minified asset.
+ *
+ * @param array $libraries - Array of libraries.
+ * @param array $asset_matchers - Types of assets to process.
+ * @return array
+ */
+function themekit_assets_process_libraries(array $libraries, array $asset_matchers) {
+  // Load themekit_asset settings
+  $config = \Drupal::config('themekit_assets.settings');
+
+  foreach ($libraries as $key => $lib) {
+    foreach ($asset_matchers as $asset_type) {
+      if ($config->get('prod_' . $asset_type) && isset($lib[$asset_type])) {
+        $asset_settings = array();
+        $add_key = '';
+
+        if ($asset_type == 'css') {
+          $add_key = array_keys($lib[$asset_type])[0];
+          if (isset($lib[$asset_type][$add_key])) {
+            $asset_settings = $lib[$asset_type][$add_key];
+            unset($libraries[$key][$asset_type][$add_key][array_keys($asset_settings)[0]]);
+          }
+        } elseif ($asset_type == 'js') {
+          $asset_settings = $lib[$asset_type];
+        }
+
+        foreach ($asset_settings as $asset_key => $settings) {
+          if (isset($settings['compile']) && $settings['compile']) {
+            // Add new .min key.
+            $asset_settings[themekit_assets_get_minified_path($asset_key, $asset_type)] = $settings;
+
+            // Remove old key
+            unset($asset_settings[$asset_key]);
+          }
+        }
+
+        // Assign the new settings up the chain.
+        if ($add_key) {
+          $libraries[$key][$asset_type][$add_key] = $asset_settings;
+        } else {
+          $libraries[$key][$asset_type] = $asset_settings;
+        }
+      }
+    }
+  }
+  return $libraries;
+}
+
+/**
+ * Return a minified version of the given path.
+ * @param $path
+ * @param $extension
+ * @return string
+ */
+function themekit_assets_get_minified_path($path, $extension) {
+  $minified_path = $path;
+  $split_pos = strpos($path, '.' . $extension);
+
+  if ($split_pos) {
+    $minified_path = implode('.min', str_split($path, $split_pos));
+  }
+
+  return $minified_path;
+}

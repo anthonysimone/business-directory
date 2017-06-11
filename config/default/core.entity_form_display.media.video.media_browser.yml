@@ -1,0 +1,35 @@
+uuid: 8e40dccf-98db-47d0-b328-fc003764ceb6
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.media.media_browser
+    - field.field.media.video.field_video
+    - media_entity.bundle.video
+  module:
+    - video_embed_field
+id: media.video.media_browser
+targetEntityType: media
+bundle: video
+mode: media_browser
+content:
+  field_video:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: video_embed_field_textfield
+  langcode:
+    type: language_select
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  uid: true

@@ -1,0 +1,36 @@
+uuid: 9394015f-e168-4343-bd68-c415ab4e1666
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.form_preview
+    - field.field.media.video.field_video
+    - image.style.medium
+    - media_entity.bundle.video
+  module:
+    - image
+id: media.video.form_preview
+targetEntityType: media
+bundle: video
+mode: form_preview
+content:
+  name:
+    label: hidden
+    type: string
+    weight: 1
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  thumbnail:
+    type: image
+    weight: 0
+    label: hidden
+    settings:
+      image_style: medium
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_video: true
+  langcode: true
+  uid: true

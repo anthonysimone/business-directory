@@ -1,0 +1,27 @@
+name: Contact Storage Export
+type: module
+description: Provides a way to export Contact Form submissions to CSV.
+# core: 8.x
+package: Custom
+dependencies:
+  - contact
+  - contact_storage
+  - csv_serialization
+
+# Information added by Drupal.org packaging script on 2016-07-13
+# version: '8.x-1.4'
+# core: '8.x'
+# project: 'contact_storage_export'
+# datestamp: 1468397340
+
+# Information added by Drupal.org packaging script on 2016-09-14
+# version: '8.x-1.5'
+# core: '8.x'
+# project: 'contact_storage_export'
+# datestamp: 1473884348
+
+# Information added by Drupal.org packaging script on 2017-02-03
+version: '8.x-1.10'
+core: '8.x'
+project: 'contact_storage_export'
+datestamp: 1486113790

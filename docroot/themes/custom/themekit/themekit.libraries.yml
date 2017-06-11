@@ -1,0 +1,33 @@
+#base:
+#  version: VERSION
+#  js:
+#    js/lib/modernizr-custom.js: {}
+
+# google fonts
+#fonts:
+#  css:
+#    theme:
+#      '//fonts.googleapis.com/css?family=Lato:400,700,400italic': { type: external, minified: true }
+
+# typekit
+#typekit:
+#  version: 1.x
+#  header: true
+#  js:
+#    //use.typekit.net/ydi4zcl.js: { every_page: true }
+#    js/vendor/typekit.js: { every_page: true }
+
+themekit:
+  version: VERSION
+  js:
+    js/dist/themekit.js: { compile: true }
+  css:
+    theme:
+      css/style.css: { compile: true }
+
+# Define additional sub-apps here. Be sure to first add it
+# as an entry point in webpack.config.js
+#myApp:
+#  version: 1.x
+#  js:
+#    js/dist/myApp.js: {}

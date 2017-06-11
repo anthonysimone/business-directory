@@ -1,0 +1,13 @@
+name: Ultimate Cron Logger Test
+type: module
+description: Ultimate Cron Logger Test
+# core: 8.x
+package: Tests
+dependencies:
+  - ultimate_cron
+
+# Information added by Drupal.org packaging script on 2016-05-24
+version: '8.x-2.0-alpha1'
+core: '8.x'
+project: 'ultimate_cron'
+datestamp: 1464114866

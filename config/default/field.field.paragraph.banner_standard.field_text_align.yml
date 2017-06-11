@@ -1,0 +1,23 @@
+uuid: e3206b16-3e56-469c-8430-9b0adef38aec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paragraph.field_text_align
+    - paragraphs.paragraphs_type.banner_standard
+  module:
+    - options
+id: paragraph.banner_standard.field_text_align
+field_name: field_text_align
+entity_type: paragraph
+bundle: banner_standard
+label: 'Text Align'
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: left
+default_value_callback: ''
+settings: {  }
+field_type: list_string

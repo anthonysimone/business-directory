@@ -1,0 +1,61 @@
+uuid: 17bccdb8-ae10-441f-961d-d0e04009ca56
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.svg.field_svg
+    - field.field.media.svg.field_svg_type
+    - field.field.media.svg.field_tags
+    - media_entity.bundle.svg
+  module:
+    - file
+id: media.svg.default
+targetEntityType: media
+bundle: svg
+mode: default
+content:
+  created:
+    type: datetime_timestamp
+    weight: 6
+    settings: {  }
+    third_party_settings: {  }
+  field_svg:
+    weight: 1
+    settings:
+      progress_indicator: throbber
+    third_party_settings: {  }
+    type: file_generic
+  field_svg_type:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+  field_tags:
+    weight: 3
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete_tags
+  langcode:
+    type: language_select
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  uid:
+    type: entity_reference_autocomplete
+    weight: 5
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden: {  }

@@ -1,0 +1,12 @@
+# core : 8.x
+type: module
+name : System Status
+description : "Provides an overview of all the available updates for your Drupal website using an external service."
+configure : system_status.admin_settings
+
+
+# Information added by Drupal.org packaging script on 2016-11-27
+version: '8.x-2.4'
+core: '8.x'
+project: 'system_status'
+datestamp: 1480252083

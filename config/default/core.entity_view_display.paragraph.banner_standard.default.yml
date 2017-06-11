@@ -1,0 +1,52 @@
+uuid: 290aec77-bee6-4356-866c-dacea35c3408
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.banner_standard.field_heading
+    - field.field.paragraph.banner_standard.field_primary_link
+    - field.field.paragraph.banner_standard.field_secondary_link
+    - field.field.paragraph.banner_standard.field_summary
+    - field.field.paragraph.banner_standard.field_text_align
+    - paragraphs.paragraphs_type.banner_standard
+  module:
+    - link
+    - options
+id: paragraph.banner_standard.default
+targetEntityType: paragraph
+bundle: banner_standard
+mode: default
+content:
+  field_primary_link:
+    weight: 1
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  field_secondary_link:
+    weight: 2
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  field_text_align:
+    weight: 0
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+hidden:
+  created: true
+  field_heading: true
+  field_summary: true
+  uid: true
