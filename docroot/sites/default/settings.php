@@ -103,7 +103,7 @@ $config['system.logging']['error_level'] = 'all';
 $config['google_analytics.settings']['account'] = '';
 
 // If $_ENV['AH_SITE_ENVIRONMENT'], load Acquia settings.
-if(isset($_ENV['FORGE_SITE_ENVIRONMENT'])) {
+if(getenv('FORGE_SITE_ENVIRONMENT'))  {
   if (file_exists(__DIR__ . '/settings.forge.php')) {
     include __DIR__ . '/settings.forge.php';
 
