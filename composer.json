@@ -26,7 +26,7 @@
     "drupal/core": "*",
     "drush/drush": "~8.0",
     "drupal/console": "^1.0",
-    "drupal/devel": "^1.0",
+    "drupal/devel": "1.x-dev",
     "drupal/config_installer": "^1.0",
     "drupal/memcache": "^2.0",
     "drupal/coffee": "^1.0",

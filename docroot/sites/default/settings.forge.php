@@ -1,12 +1,12 @@
 <?php
 
-$acquia_site_name = 'paragon';
-if (file_exists('/var/www/site-php')) {
-  require("/var/www/site-php/{$acquia_site_name}/{$acquia_site_name}-settings.inc");
-}
+$acquia_site_name = 'business_directory';
+//if (file_exists('/var/www/site-php')) {
+//  require("/var/www/site-php/{$acquia_site_name}/{$acquia_site_name}-settings.inc");
+//}
 
-$settings['file_private_path'] = "/mnt/files/{$acquia_site_name}.{$_ENV['AH_SITE_ENVIRONMENT']}/files-private";
-$config['system.file']['path']['temporary'] = "/mnt/tmp/{$acquia_site_name}.{$_ENV['AH_SITE_ENVIRONMENT']}";
+$settings['file_private_path'] = "/mnt/files/{$acquia_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}/files-private";
+$config['system.file']['path']['temporary'] = "/mnt/tmp/{$acquia_site_name}.{$_ENV['FORGE_SITE_ENVIRONMENT']}";
 
 //# https://docs.acquia.com/article/drupal-8-cache-backend
 //$settings['cache']['default'] = 'cache.backend.memcache';
@@ -43,12 +43,11 @@ $config['system.performance']['js']['preprocess'] = TRUE;
  */
 $config['environment_indicator.indicator']['bg_color'] = '#930007';
 $config['environment_indicator.indicator']['fg_color'] = '#ffffff';
-$config['environment_indicator.indicator']['name'] = 'Acquia ' . $_ENV['AH_SITE_ENVIRONMENT'];
+$config['environment_indicator.indicator']['name'] = 'Forge ' . $_ENV['FORGE_SITE_ENVIRONMENT'];
 
 // Set trusted host pattern for the acquia paragon site. We need to set this because we cannot add additional
 // aliases to a free acquia account. This can be deleted for any new project created from paragon.
-$settings['trusted_host_patterns'][] = 'paragonbhybefranz.devcloud.acquia-sites.com';
-$settings['trusted_host_patterns'][] = 'paragono6pncnthxe.devcloud.acquia-sites.com';
+$settings['trusted_host_patterns'][] = '*.organyzr.com';
 
 /**
  * Set default config_readonly status to TRUE on all Acquia environments.
@@ -57,11 +56,11 @@ $settings['trusted_host_patterns'][] = 'paragono6pncnthxe.devcloud.acquia-sites.
 //  $settings['config_readonly'] = FALSE;
 //}
 
-switch ($_ENV['AH_SITE_ENVIRONMENT']) {
+switch ($_ENV['FORGE_SITE_ENVIRONMENT']) {
   case 'dev':
     // Configure shield for dev environment.
-    $config['shield.settings']['user'] = 'paragon';
-    $config['shield.settings']['pass'] = '3ditParagon';
+    $config['shield.settings']['user'] = 'bob';
+    $config['shield.settings']['pass'] = 'bobsproject';
   
     /**
      * Master DB and Config Read-Only settings
@@ -75,16 +74,16 @@ switch ($_ENV['AH_SITE_ENVIRONMENT']) {
      * All Master DB config must be merged into the master branch before merging new config from VCS.
      *
      */
-    $config['environment_indicator.indicator']['name'] = 'Acquia ' . $_ENV['AH_SITE_ENVIRONMENT'] . ' [Master DB]';
+    $config['environment_indicator.indicator']['name'] = 'Forge ' . $_ENV['FORGE_SITE_ENVIRONMENT'] . ' [Master DB]';
     $config['environment_indicator.indicator']['bg_color'] = '#000000';
     $config['google_analytics.settings']['account'] = '';
     break;
-  case 'test':
-    // Configure shield for test environment.
-    $config['shield.settings']['user'] = 'paragon';
-    $config['shield.settings']['pass'] = '3ditParagon';
-    $config['google_analytics.settings']['account'] = '';
-    break;
+//  case 'test':
+//    // Configure shield for test environment.
+//    $config['shield.settings']['user'] = 'paragon';
+//    $config['shield.settings']['pass'] = '3ditParagon';
+//    $config['google_analytics.settings']['account'] = '';
+//    break;
   case 'prod':
 
     // Set logging level on production.
