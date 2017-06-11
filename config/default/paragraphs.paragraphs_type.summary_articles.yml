@@ -4,3 +4,4 @@ status: true
 dependencies: {  }
 id: summary_articles
 label: 'Summary - Articles'
+behavior_plugins: {  }

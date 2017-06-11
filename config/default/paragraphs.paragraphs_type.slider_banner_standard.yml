@@ -4,3 +4,4 @@ status: true
 dependencies: {  }
 id: slider_banner_standard
 label: 'Slider - Banner Standard'
+behavior_plugins: {  }

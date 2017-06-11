@@ -4,3 +4,4 @@ status: true
 dependencies: {  }
 id: single_heading
 label: 'Single - Heading'
+behavior_plugins: {  }

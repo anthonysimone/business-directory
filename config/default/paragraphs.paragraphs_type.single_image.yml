@@ -4,3 +4,4 @@ status: true
 dependencies: {  }
 id: single_image
 label: 'Single - Image'
+behavior_plugins: {  }
