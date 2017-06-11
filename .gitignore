@@ -63,6 +63,7 @@ nbproject
 
 
 # Ignore git directories/files in composer plugins #
+vendor
 vendor/**/.git
 docroot/**/.git
 vendor/**/.gitattributes
