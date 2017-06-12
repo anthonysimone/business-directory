@@ -68,3 +68,6 @@ vendor/**/.git
 docroot/**/.git
 vendor/**/.gitattributes
 docroot/**/.gitattributes
+
+# Server
+.env
