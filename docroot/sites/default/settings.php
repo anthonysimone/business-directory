@@ -101,52 +101,19 @@ $config['system.logging']['error_level'] = 'all';
 $config['google_analytics.settings']['account'] = '';
 
 
-//if (getenv('HOME')) {
-//  $home_dir = getenv('HOME');
-//  $environment_name = 'busdir-dev.organyzr.com';
-//
-//  $dotenv = new Dotenv\Dotenv($home_dir . '/' . $environment_name);
-//  $dotenv->load();
-//} else {
-//
-////  echo '<div class="test-var">'.$base_path.'</div>';
-//}
+// Initialize Dotenv with relative path to project root if .env file exists
+if (file_exists(__DIR__ . '/../../../.env')) {
+  $dotenv = new Dotenv\Dotenv(__DIR__ . '/../../..');
+  $dotenv->load();
+}
 
-// Initialize Dotenv with relative path to project root
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/../../..');
-$dotenv->load();
-//$test_var = getenv('TEST_VAR');
-//echo '<div class="test-var">'.$test_var.'</div>';
-
-// If $_ENV['AH_SITE_ENVIRONMENT'], load Acquia settings.
+// If $_ENV['FORGE_SITE_ENVIRONMENT'], load Acquia settings.
 if(getenv('FORGE_SITE_ENVIRONMENT'))  {
   if (file_exists(__DIR__ . '/settings.forge.php')) {
     include __DIR__ . '/settings.forge.php';
   }
 }
-// If $_SERVER['AH_SITE_ENVIRONMENT'], load Blackmesh settings.
-//elseif(isset($_SERVER['FORGE_SITE_ENVIRONMENT'])) {
-//  if (file_exists(__DIR__ . '/settings.blackmesh.php')) {
-//    include __DIR__ . '/settings.blackmesh.php';
-//  }
-//}
-// If drupal-vm settings exist, load them.
+// Else, load drupal-vm settings if they exist.
 elseif (file_exists(__DIR__ . '/settings.drupalvm.php')) {
   include __DIR__ . '/settings.drupalvm.php';
 }
-
-// If local settings file exists, load it.
-//if(file_exists(__DIR__ . '/settings.local.php')) {
-//  include __DIR__ . '/settings.local.php';
-//}
-//
-//$databases['default']['default'] = array (
-//  'database' => 'busdir_dev',
-//  'username' => 'busdir_user',
-//  'password' => '070m783YI8Sk02z',
-//  'prefix' => '',
-//  'host' => '67.205.190.2',
-//  'port' => '3306',
-//  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-//  'driver' => 'mysql',
-//);

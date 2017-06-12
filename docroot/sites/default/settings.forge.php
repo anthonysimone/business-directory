@@ -63,9 +63,6 @@ $settings['trusted_host_patterns'][] = '*.organyzr.com';
 /**
  * Set default config_readonly status to TRUE on all Acquia environments.
  */
-//if (PHP_SAPI !== 'cli') {
-//  $settings['config_readonly'] = FALSE;
-//}
 
 switch ($_ENV['FORGE_SITE_ENVIRONMENT']) {
   case 'dev':
