@@ -25,6 +25,7 @@ content:
       height: 480
       autoplay: true
     third_party_settings: {  }
+    region: content
   name:
     type: string
     weight: 0
@@ -32,6 +33,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
 hidden:
   created: true
   field_tags: true

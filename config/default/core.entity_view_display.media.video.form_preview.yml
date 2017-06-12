@@ -4,7 +4,10 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.form_preview
+    - field.field.media.video.field_tags
     - field.field.media.video.field_video
+    - field.field.media.video.field_video_id
+    - field.field.media.video.field_video_type
     - image.style.medium
     - media_entity.bundle.video
   module:
@@ -21,6 +24,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
   thumbnail:
     type: image
     weight: 0
@@ -29,6 +33,7 @@ content:
       image_style: medium
       image_link: ''
     third_party_settings: {  }
+    region: content
 hidden:
   created: true
   field_tags: true

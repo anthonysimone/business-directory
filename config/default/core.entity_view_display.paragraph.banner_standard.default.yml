@@ -28,6 +28,7 @@ content:
       target: ''
     third_party_settings: {  }
     type: link
+    region: content
   field_secondary_link:
     weight: 2
     label: above
@@ -39,12 +40,14 @@ content:
       target: ''
     third_party_settings: {  }
     type: link
+    region: content
   field_text_align:
     weight: 0
     label: above
     settings: {  }
     third_party_settings: {  }
     type: list_default
+    region: content
 hidden:
   created: true
   field_heading: true

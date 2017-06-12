@@ -26,6 +26,7 @@ content:
       autoplay: true
     third_party_settings: {  }
     type: video_embed_field_video
+    region: content
 hidden:
   created: true
   field_tags: true

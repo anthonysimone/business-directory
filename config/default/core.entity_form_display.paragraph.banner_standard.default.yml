@@ -24,6 +24,7 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+    region: content
   field_primary_link:
     weight: 5
     settings:
@@ -31,6 +32,7 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
   field_secondary_link:
     weight: 6
     settings:
@@ -38,6 +40,7 @@ content:
       placeholder_title: ''
     third_party_settings: {  }
     type: link_default
+    region: content
   field_summary:
     type: text_textarea
     weight: 1
@@ -45,11 +48,13 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+    region: content
   field_text_align:
     weight: 4
     settings: {  }
     third_party_settings: {  }
     type: options_buttons
+    region: content
 hidden:
   created: true
   status: true

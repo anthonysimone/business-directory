@@ -13,5 +13,6 @@ mode: default
 content:
   member_for:
     weight: 5
+    region: content
 hidden:
   langcode: true
