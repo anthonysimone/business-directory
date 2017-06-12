@@ -113,7 +113,7 @@ $config['google_analytics.settings']['account'] = '';
 //}
 
 // Initialize Dotenv with relative path to project root
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/../..');
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
 $dotenv->load();
 //$test_var = getenv('TEST_VAR');
 //echo '<div class="test-var">'.$test_var.'</div>';
